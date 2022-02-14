@@ -117,10 +117,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.node-version }}-nodemodules2-
 
-      - name: Download standalone Python
-        run: |
-          ./downloadPython.sh
-
       ## Dependencies
       - name: Install Dependencies
         if: |

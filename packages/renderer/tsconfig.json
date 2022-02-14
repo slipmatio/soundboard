@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "mainpkg/*": ["../main/src/*"]
+    },
+    "lib": ["ESNext", "dom", "dom.iterable"]
+  },
+
+  "include": [
+    "src/**/*.vue",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "types/**/*.d.ts",
+    "../../types/**/*.d.ts",
+    "../preload/exposedInMainWorld.d.ts"
+  ]
+}

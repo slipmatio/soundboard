@@ -1,0 +1,15 @@
+node_modules
+.DS_Store
+dist
+*.local
+thumbs.db
+
+.eslintcache
+yarn-error.log
+
+.env
+.env.local
+.env.*.local
+developer-id-application-cert.p12
+
+local_notes.md

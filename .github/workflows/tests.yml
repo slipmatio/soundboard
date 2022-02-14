@@ -30,11 +30,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      ## Yarn dir
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
       ## Cache
       - name: Cache yarn cache
         uses: actions/cache@v2
@@ -43,7 +38,7 @@ jobs:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn2-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn2-
+            ${{ runner.os }}-yarn2-${{ hashFiles('**/yarn.lock') }}
 
       ## Cache
       - name: Cache node_modules
@@ -53,7 +48,7 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules2-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules2-
+            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules2-${{ hashFiles('**/yarn.lock') }}
 
       - name: Configure pip caching
         id: cache-pip
@@ -62,13 +57,10 @@ jobs:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
 
       ## Dependencies
       - name: Install Dependencies
-        if: |
-          steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
-          steps.cache-node-modules.outputs.cache-hit != 'true'
         run: yarn --frozen-lockfile
 
       ## Test

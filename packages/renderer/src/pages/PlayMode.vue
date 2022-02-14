@@ -9,7 +9,7 @@ const files = computed(() => store.files)
 
 function increase() {
   store.initialValue++
-  store.saveStore()
+  // store.saveStore()
 }
 
 function openFilepicker() {

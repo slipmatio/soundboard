@@ -33,7 +33,7 @@ window.api.receive('focus', () => {
   headerBgColor.value = '#333537'
 })
 
-window.api.receive('addSamples', (filepaths: string[]) => {
+window.api.receive('addSamples', async (filepaths: string[]) => {
   console.log('in main addSamples', filepaths)
   for (const filepath of filepaths) {
     store.files.push(filepath)

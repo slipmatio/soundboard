@@ -120,9 +120,9 @@ const createWindow = async () => {
   })
 
   await mainWindow.loadURL(mainPageUrl)
-  if (isDevelopment) {
-    mainWindow.webContents.openDevTools()
-  }
+  // if (isDevelopment) {
+  //   mainWindow.webContents.openDevTools()
+  // }
 }
 
 app

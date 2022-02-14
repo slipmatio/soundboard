@@ -26,7 +26,7 @@ export const useStore = defineStore('main', {
         if (!window.api.store.get('notFirstStart')) {
           this.env.firstStart = true
           console.log('this is first start!')
-          window.api.store.set('notFirstStart', true)
+          // window.api.store.set('notFirstStart', true)
         } else {
           // this.env.firstStart = false
         }
@@ -37,7 +37,7 @@ export const useStore = defineStore('main', {
     },
 
     saveStore() {
-      window.api.store.set('initialValue', this.initialValue)
+      // window.api.store.set('initialValue', this.initialValue)
     },
   },
 })

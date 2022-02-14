@@ -20,8 +20,12 @@ const config = {
     appId: process.env.APP_BUNDLE_ID,
     mac: {
       category: 'public.app-category.developer-tools',
-      target: ['zip'],
-      arch: 'x64',
+      target: [
+        {
+          target: 'zip',
+          arch: ['x64', 'arm64'],
+        },
+      ],
       hardenedRuntime: true,
       gatekeeperAssess: false,
       entitlements: 'buildResources/entitlements.mac.plist',

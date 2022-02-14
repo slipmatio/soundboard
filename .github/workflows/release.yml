@@ -135,7 +135,7 @@ jobs:
           RELEASE_NOTE: ${{ needs.draft.outputs.release-note }}
         run: echo "$RELEASE_NOTE" >> ./buildResources/release-notes.md
 
-      - name: Compile & release Electron app (x64)
+      - name: Compile & release Electron app (arm64 + x64)
         uses: samuelmeuli/action-electron-builder@v1
         env:
           VITE_APP_VERSION: ${{ needs.draft.outputs.version }}
@@ -148,28 +148,8 @@ jobs:
           SKIP_NOTARIZATION: '1'
         with:
           build_script_name: build
-          args: --config .electron-builder.config_x64.js
+          args: --config .electron-builder.config.js --x64 --arm64
 
           github_token: ${{ secrets.github_token }}
           release: true
           max_attempts: 2
-
-      # # Compile app and upload artifacts
-      # - name: Compile & release Electron app (arm64)
-      #   uses: samuelmeuli/action-electron-builder@v1
-      #   env:
-      #     VITE_APP_VERSION: ${{ needs.draft.outputs.version }}
-      #     CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-      #     CSC_LINK: ${{ secrets.CSC_LINK }}
-      #     APPLE_ID: ${{ secrets.APPLE_ID }}
-      #     APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
-      #     APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-      #     VITE_PROD_DEBUG: '1'
-      #     SKIP_NOTARIZATION: '1'
-      #   with:
-      #     build_script_name: build
-      #     args: --config .electron-builder.config_arm64.js --arm64
-
-      #     github_token: ${{ secrets.github_token }}
-      #     release: false
-      #     max_attempts: 1

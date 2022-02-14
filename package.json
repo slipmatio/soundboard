@@ -15,9 +15,9 @@
   "scripts": {
     "build": "node scripts/build.js",
     "buildrenderer": "vite build --config packages/renderer/vite.config.js",
-    "compile": "electron-builder build --config .electron-builder.config_x64.js",
-    "devcompile": "SKIP_NOTARIZATION=1 electron-builder build --config .electron-builder.config_x64.js --dir --config.asar=false",
-    "compilearm": "yarn build && SKIP_NOTARIZATION=1 electron-builder build --config .electron-builder.config_arm64.js --dir --config.asar=false --arm64",
+    "compile": "electron-builder build --config .electron-builder.config.js --x64 --arm64",
+    "devcompile": "SKIP_NOTARIZATION=1 electron-builder build --config .electron-builder.config.js --dir --config.asar=false",
+    "compilearm": "yarn build && SKIP_NOTARIZATION=1 electron-builder build --config .electron-builder.config.js --dir --config.asar=false --arm64",
     "compilex64": "yarn build && SKIP_NOTARIZATION=1 electron-builder build --config .electron-builder.config.js --dir --config.asar=false --x64",
     "pretest": "npm run build",
     "test": "node tests/app.spec.js",

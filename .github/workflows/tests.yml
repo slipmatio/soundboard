@@ -30,4 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: bahmutov/npm-install@v1
+
+      ## Test
+      - name: Run tests
         run: yarn test

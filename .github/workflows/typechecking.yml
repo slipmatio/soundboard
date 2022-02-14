@@ -63,4 +63,4 @@ jobs:
       # Type checking is divided into three separate commands for more convenient logs
       - run: yarn typecheck-main
       - run: yarn typecheck-preload
-      - run: yarn typecheck-rendere
+      - run: yarn typecheck-renderer

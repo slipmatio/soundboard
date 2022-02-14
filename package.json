@@ -26,8 +26,8 @@
     "lint": "eslint . --ext js,ts,vue",
     "typecheck-main": "tsc --noEmit -p packages/main/tsconfig.json",
     "typecheck-preload": "tsc --noEmit -p packages/preload/tsconfig.json",
-    "typecheck-rendere": "vue-tsc --noEmit -p packages/renderer/tsconfig.json",
-    "typecheck": "yarn typecheck-main && yarn typecheck-preload && yarn typecheck-rendere",
+    "typecheck-renderer": "vue-tsc --noEmit -p packages/renderer/tsconfig.json",
+    "typecheck": "yarn typecheck-main && yarn typecheck-preload && yarn typecheck-renderer",
     "pretypecheck-renderer": "dts-cb -i packages/preload/src/**/*.ts -o packages/preload/exposedInMainWorld.d.ts"
   },
   "browserslist": [

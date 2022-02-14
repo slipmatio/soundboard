@@ -1,5 +1,23 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useStore } from '@/store'
+
+const store = useStore()
+const version = import.meta.env.VITE_APP_VERSION
+const initialValue = computed(() => store.initialValue)
+
+function increase() {
+  store.initialValue++
+  store.saveStore()
+}
+</script>
+
 <template>
-  <h1 class="text-7xl font-bold underline">Hello world!</h1>
+  <h1 class="font-bold underline text-7xl">Hello world!</h1>
+
+  <p>Initial state value: {{ initialValue }}</p>
+
+  <button @click="increase">Increase</button>
 
   <p>Template version v{{ version }}</p>
 
@@ -14,7 +32,3 @@
     >.
   </p>
 </template>
-
-<script setup lang="ts">
-const version = import.meta.env.VITE_APP_VERSION
-</script>

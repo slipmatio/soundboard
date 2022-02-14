@@ -38,8 +38,10 @@
     "pre-push": "yarn typecheck"
   },
   "dependencies": {
+    "@nuxt/devalue": "^2.0.0",
     "autoprefixer": "^10.4",
     "electron-settings": "^4.0",
+    "electron-store": "^8.0.1",
     "electron-updater": "^4.6",
     "electron-util": "^0.17",
     "events": "^3.3",

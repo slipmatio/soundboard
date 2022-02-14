@@ -1,8 +1,11 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { URL } from 'url'
+// import devalue from '@nuxt/devalue'
+import Store from 'electron-store'
+import 'v8-compile-cache'
+
 import { enforceApplicationFolder } from './utils'
-// import 'v8-compile-cache'
 import './security'
 
 // import settings from 'electron-settings'
@@ -10,11 +13,16 @@ import './security'
 // See https://www.electronjs.org/docs/latest/tutorial/offscreen-rendering
 app.disableHardwareAcceleration()
 
+const store = new Store({
+  name: 'pinia',
+  // serialize: devalue,
+})
 const isSingleInstance = app.requestSingleInstanceLock()
 const isDevelopment = import.meta.env.MODE === 'development'
 console.log('userData dir: ', app.getPath('userData'))
 
 // const prodDebug = import.meta.env.VITE_PROD_DEBUG === '1'
+let rendererReady = false
 let mainWindow: BrowserWindow | null = null
 const mainPageUrl =
   isDevelopment && import.meta.env.VITE_DEV_SERVER_URL !== undefined
@@ -40,6 +48,24 @@ if (isDevelopment) {
     .catch((e) => console.error('Failed to install Vue devtools extension:', e))
 }
 
+function initMain() {
+  return new Promise<void>((resolve) => {
+    ipcMain.on('electron-store-get', async (event, val) => {
+      event.returnValue = store.get(val)
+    })
+    ipcMain.on('electron-store-set', async (event, key, val) => {
+      store.set(key, val)
+    })
+
+    ipcMain.on('rendererReady', () => {
+      console.log('renderer is ready!')
+      rendererReady = true
+    })
+
+    resolve()
+  })
+}
+
 const createWindow = async () => {
   mainWindow = new BrowserWindow({
     width: 800,
@@ -60,18 +86,21 @@ const createWindow = async () => {
    * @see https://github.com/electron/electron/issues/25012
    */
   mainWindow.on('ready-to-show', async () => {
-    mainWindow?.show()
-    if (isDevelopment) {
-      mainWindow?.webContents.openDevTools()
+    if (rendererReady) {
+      mainWindow?.show()
     }
   })
 
   await mainWindow.loadURL(mainPageUrl)
+  if (isDevelopment) {
+    mainWindow?.webContents.openDevTools()
+  }
 }
 
 app
   .whenReady()
   .then(enforceApplicationFolder)
+  .then(initMain)
   .then(createWindow)
   .catch((e) => {
     console.error('Failed create window:', e)

@@ -12,6 +12,7 @@ export const useStore = defineStore('main', {
     },
     boards: [] as Board[],
     samples: [] as Sample[],
+    files: [] as string[],
     initialValue: 1,
   }),
   actions: {

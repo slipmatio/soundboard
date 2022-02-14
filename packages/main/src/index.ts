@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { URL } from 'url'
 // import devalue from '@nuxt/devalue'
@@ -34,34 +34,52 @@ if (!isSingleInstance) {
   process.exit(0)
 }
 
-if (isDevelopment) {
-  app
-    .whenReady()
-    .then(() => import('electron-devtools-installer'))
-    .then(({ default: installExtension, VUEJS3_DEVTOOLS }) =>
-      installExtension(VUEJS3_DEVTOOLS, {
-        loadExtensionOptions: {
-          allowFileAccess: true,
-        },
-      })
-    )
-    .catch((e) => console.error('Failed to install Vue devtools extension:', e))
-}
+// if (isDevelopment) {
+//   app
+//     .whenReady()
+//     .then(() => import('electron-devtools-installer'))
+//     .then(({ default: installExtension, VUEJS3_DEVTOOLS }) =>
+//       installExtension(VUEJS3_DEVTOOLS, {
+//         loadExtensionOptions: {
+//           allowFileAccess: true,
+//         },
+//       })
+//     )
+//     .catch((e) => console.error('Failed to install Vue devtools extension:', e))
+// }
+
+ipcMain.on('electron-store-get', async (event, val) => {
+  event.returnValue = store.get(val)
+})
+ipcMain.on('electron-store-set', async (event, key, val) => {
+  store.set(key, val)
+})
+
+ipcMain.on('rendererReady', () => {
+  console.log('renderer is ready!')
+  rendererReady = true
+})
+
+ipcMain.on('openSamplesFilepicker', () => {
+  console.log('main -> openSamplesFilepicker')
+
+  dialog
+    .showOpenDialog({
+      filters: [{ name: 'Samples', extensions: ['mp3', 'wav', 'aac'] }],
+      properties: ['openFile', 'multiSelections'],
+    })
+    .then((result) => {
+      console.log('main -> openSamplesFilepicker THEN', result.filePaths)
+      mainWindow.webContents.send('addSamples', result.filePaths)
+    })
+    .catch((err) => {
+      console.error('main -> openSamplesFilepicker CATCH', err)
+      // return reject(err)
+    })
+})
 
 function initMain() {
   return new Promise<void>((resolve) => {
-    ipcMain.on('electron-store-get', async (event, val) => {
-      event.returnValue = store.get(val)
-    })
-    ipcMain.on('electron-store-set', async (event, key, val) => {
-      store.set(key, val)
-    })
-
-    ipcMain.on('rendererReady', () => {
-      console.log('renderer is ready!')
-      rendererReady = true
-    })
-
     resolve()
   })
 }

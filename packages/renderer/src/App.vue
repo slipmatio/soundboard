@@ -32,6 +32,14 @@ window.api.receive('focus', () => {
   headerColor.value = '#eaeaeb'
   headerBgColor.value = '#333537'
 })
+
+window.api.receive('addSamples', (filepaths: string[]) => {
+  console.log('in main addSamples', filepaths)
+  for (const filepath of filepaths) {
+    store.files.push(filepath)
+  }
+  console.log('date: ', new Date().toUTCString())
+})
 </script>
 
 <style>

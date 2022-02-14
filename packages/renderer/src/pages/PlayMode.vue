@@ -5,10 +5,15 @@ import { useStore } from '@/store'
 const store = useStore()
 const initialValue = computed(() => store.initialValue)
 const firstStart = computed(() => store.env.firstStart)
+const files = computed(() => store.files)
 
 function increase() {
   store.initialValue++
   store.saveStore()
+}
+
+function openFilepicker() {
+  window.api.sendSync('openSamplesFilepicker')
 }
 </script>
 
@@ -24,10 +29,15 @@ function increase() {
 
       <p class="mt-4 text-xl">
         It looks like this is your first time using Slipmat Soundboard. Start by
-        adding some samples to your library.
+        importing some samples to your library.
       </p>
 
-      <button class="mt-10 btn big">
+      <p class="mt-4 text-md">
+        Samples need to be MP3, WAV, or AAC files. They will be copied into
+        Soundboard user folder.
+      </p>
+
+      <button class="mt-10 btn big" @click="openFilepicker">
         <div class="flex flex-row items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -43,9 +53,14 @@ function increase() {
               d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span class="ml-2">Add sample</span>
+          <span class="ml-2">Import samples</span>
         </div>
       </button>
+
+      <h3 class="mt-8">Files ({{ files.length }})</h3>
+      <ul>
+        <li v-for="file in files" :key="file">{{ file }}</li>
+      </ul>
     </div>
   </div>
 </template>

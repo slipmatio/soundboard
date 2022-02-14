@@ -23,7 +23,7 @@ console.log('userData dir: ', app.getPath('userData'))
 
 // const prodDebug = import.meta.env.VITE_PROD_DEBUG === '1'
 let rendererReady = false
-let mainWindow: BrowserWindow | null = null
+let mainWindow: BrowserWindow
 const mainPageUrl =
   isDevelopment && import.meta.env.VITE_DEV_SERVER_URL !== undefined
     ? import.meta.env.VITE_DEV_SERVER_URL
@@ -72,11 +72,21 @@ const createWindow = async () => {
     height: 600,
     show: false, // Use 'ready-to-show' event to show window
     titleBarStyle: 'hidden',
+    trafficLightPosition: { x: 18, y: 18 },
     webPreferences: {
       webviewTag: false,
       nativeWindowOpen: true,
       preload: join(__dirname, '../../preload/dist/index.cjs'),
     },
+  })
+  mainWindow.setBackgroundColor('#1C1E20')
+
+  mainWindow.on('focus', () => {
+    mainWindow.webContents.send('focus')
+  })
+
+  mainWindow.on('blur', () => {
+    mainWindow.webContents.send('blur')
   })
 
   /**
@@ -87,13 +97,13 @@ const createWindow = async () => {
    */
   mainWindow.on('ready-to-show', async () => {
     if (rendererReady) {
-      mainWindow?.show()
+      mainWindow.show()
     }
   })
 
   await mainWindow.loadURL(mainPageUrl)
   if (isDevelopment) {
-    mainWindow?.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
   }
 }
 

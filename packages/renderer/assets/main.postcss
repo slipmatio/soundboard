@@ -4,9 +4,16 @@
 
 html {
   @apply bg-black text-gray-200;
+  font-size: 14px;
 }
 
-#title {
+*,
+a,
+button {
+  cursor: default;
+  user-select: none;
+}
+
+.os-draggable {
   -webkit-app-region: drag;
-  height: 26px;
 }

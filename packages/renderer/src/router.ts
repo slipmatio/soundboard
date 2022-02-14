@@ -1,8 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '@/pages/Home.vue'
+import PlayMode from '@/pages/PlayMode.vue'
 
 const routes = [
-  { path: '/', name: 'Home', component: Home },
+  { path: '/', name: 'PlayMode', component: PlayMode },
   {
     path: '/about',
     name: 'About',

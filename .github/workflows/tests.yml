@@ -64,10 +64,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Download standalone Python
-        run: |
-          ./downloadPython.sh
-
       ## Dependencies
       - name: Install Dependencies
         if: |

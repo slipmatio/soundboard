@@ -1,15 +1,10 @@
 # Slipmat Soundboard
 
-An opinionated template for running Python with Electron. Uses TypeScript, Vue 3, and Vite for bundling. Based on [vite-electron-builder](https://github.com/cawa-93/vite-electron-builder) by Alex Kozack and [datasette-app](https://github.com/simonw/datasette-app) by Simon Willison.
-
-The JavaScript/TypeScript parts are configured to work as closely with Vue best practises, and they follow the same principles than my [vite-ts-tailwind-starter](https://github.com/Uninen/vite-ts-tailwind-starter).
-
+Simple soundboard for DJs.
 ## Getting started
 
 #### Install Dependencies
 
-- Install wget: `brew install wget`
-- Install Python: `./downloadPython`
 - Install Electron dependencies: `yarn`
 
 #### Start Development Environment

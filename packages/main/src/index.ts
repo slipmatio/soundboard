@@ -12,7 +12,7 @@ app.disableHardwareAcceleration()
 
 const isSingleInstance = app.requestSingleInstanceLock()
 const isDevelopment = import.meta.env.MODE === 'development'
-console.log('userData dir: ', app.getPath('userData'))
+console.log('userData ir: ', app.getPath('userData'))
 
 // const prodDebug = import.meta.env.VITE_PROD_DEBUG === '1'
 let mainWindow: BrowserWindow | null = null

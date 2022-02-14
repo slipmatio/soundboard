@@ -20,6 +20,7 @@
     "compilearm": "yarn build && SKIP_NOTARIZATION=1 electron-builder build --config .electron-builder.config.js --dir --config.asar=false --arm64",
     "compilex64": "yarn build && SKIP_NOTARIZATION=1 electron-builder build --config .electron-builder.config.js --dir --config.asar=false --x64",
     "pretest": "npm run build",
+    "test:ci": "xvfb-run tests/app.spec.js",
     "test": "node tests/app.spec.js",
     "watch": "node scripts/watch.js",
     "dev": "yarn watch",

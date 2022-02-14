@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import { useStore } from '@/store'
 
 const store = useStore()
-const version = import.meta.env.VITE_APP_VERSION
 const initialValue = computed(() => store.initialValue)
 
 function increase() {
@@ -13,9 +12,11 @@ function increase() {
 </script>
 
 <template>
-  <div class="flex flex-1 bg-green-400">
-    <p>Initial state value: {{ initialValue }}</p>
+  <div class="flex flex-1">
+    <div>
+      <p>Initial state value: {{ initialValue }}</p>
 
-    <button @click="increase">Increase</button>
+      <button class="btn" @click="increase">Increase</button>
+    </div>
   </div>
 </template>

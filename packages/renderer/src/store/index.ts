@@ -8,6 +8,8 @@ export const useStore = defineStore('main', {
       import.meta.env.VITE_PROD_DEBUG === '1',
     isInited: false,
     loadingMessages: [] as LogItem[],
+    boards: [],
+    samples: [],
   }),
   actions: {
     initApp() {

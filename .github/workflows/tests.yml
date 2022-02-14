@@ -29,17 +29,5 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      ## Cache
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
-      ## Dependencies
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile
-
-      ## Test
-      - name: Run tests
+      - uses: bahmutov/npm-install@v1
         run: yarn test

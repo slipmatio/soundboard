@@ -14,6 +14,10 @@ button {
   user-select: none;
 }
 
+h1 {
+  @apply font-semibold text-4xl;
+}
+
 .os-draggable {
   -webkit-app-region: drag;
 }
@@ -29,6 +33,19 @@ button {
   box-shadow: 0px 2px 3px -2px rgba(0, 0, 0, 0.3);
   user-select: none;
   font-size: 13px;
+
+  &.big {
+    background: #5a5c5e;
+    color: #e6e7e7;
+    padding: 10px 20px;
+    border: 1px solid #222;
+    border-radius: 0.3rem;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0px 2px 3px -2px rgba(0, 0, 0, 0.3);
+    user-select: none;
+    font-size: 16px;
+  }
 
   &:active {
     background: #6a6c6e;

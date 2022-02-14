@@ -9,11 +9,10 @@
 </template>
 
 <script async setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useStore } from '@/store'
 
 const store = useStore()
-const isInited = computed(() => store.env.isInited)
 
 const headerColor = ref('#eaeaeb')
 const headerBgColor = ref('#333537')

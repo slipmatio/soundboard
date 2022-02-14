@@ -12,6 +12,7 @@ app.disableHardwareAcceleration()
 
 const isSingleInstance = app.requestSingleInstanceLock()
 const isDevelopment = import.meta.env.MODE === 'development'
+
 // const prodDebug = import.meta.env.VITE_PROD_DEBUG === '1'
 let mainWindow: BrowserWindow | null = null
 const mainPageUrl =

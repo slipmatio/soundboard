@@ -3,6 +3,7 @@ import type { BrowserWindow } from 'electron'
 import { is } from 'electron-util'
 
 const isDevelopment = import.meta.env.MODE === 'development'
+const isTestRun = app.commandLine.getSwitchValue('testrun')
 
 export function fadeWindowOut(_window: BrowserWindow) {
   let opacity = _window.getOpacity()
@@ -20,7 +21,7 @@ export function fadeWindowOut(_window: BrowserWindow) {
 
 export function enforceApplicationFolder() {
   return new Promise<void>((resolve, reject) => {
-    if (isDevelopment || !is.macos) {
+    if (isTestRun || isDevelopment || !is.macos) {
       console.log('Skipping enforceApplicationFolder')
       return resolve()
     }

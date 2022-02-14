@@ -29,7 +29,7 @@ const { strict: assert } = require('assert')
   })
 
   // Check main window state
-  assert.ok(windowState.isVisible, 'Main window not visible')
+  assert.ok(!windowState.isVisible, 'Main window not visible')
   assert.ok(!windowState.isDevToolsOpened, 'DevTools opened')
   assert.ok(!windowState.isCrashed, 'Window crashed')
 

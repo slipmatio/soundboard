@@ -14,6 +14,7 @@ export const useStore = defineStore('main', {
       mode: 'play' as UiMode,
       inFocus: true,
       activeSample: '',
+      dragMode: false,
     },
     boards: [] as Board[],
     samples: [] as Sample[],
@@ -89,7 +90,7 @@ export const useStore = defineStore('main', {
         if (state.ui.mode === 'play') {
           return '#333537'
         } else {
-          return '#6A3832'
+          return '#3e3562'
         }
       } else {
         return '#25282B'

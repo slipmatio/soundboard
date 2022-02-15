@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
 import WaveSurfer from 'wavesurfer.js'
 import type { Sample } from 'root/types'
@@ -31,7 +31,7 @@ function selectSample() {
   }
 }
 
-watch(wavecontainer, (newContainer, oldContainer) => {
+watch(wavecontainer, (newContainer) => {
   if (newContainer) {
     player.value = WaveSurfer.create({
       container: newContainer,

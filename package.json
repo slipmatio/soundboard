@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@nuxt/devalue": "^2.0.0",
+    "add": "^2.0.6",
     "add-filename-increment": "^1.0.0",
     "autoprefixer": "^10.4",
     "electron-settings": "^4.0",
@@ -55,10 +56,13 @@
     "unused-filename": "^4.0.0",
     "v8-compile-cache": "^2.3.0",
     "vue": "^3.2",
-    "vue-router": "^4.0"
+    "vue-router": "^4.0",
+    "wavesurfer.js": "^6.0.1",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2",
+    "@types/wavesurfer.js": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^5.11",
     "@typescript-eslint/parser": "^5.11",
     "@vitejs/plugin-vue": "^2.2",

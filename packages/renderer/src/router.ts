@@ -1,14 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '@/pages/Home.vue'
+import GridView from '@/views/GridView.vue'
 
-const routes = [
-  { path: '/', name: 'Home', component: Home },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import('@/pages/About.vue'),
-  }, // Lazy load route component
-]
+const routes = [{ path: '/', name: 'GridView', component: GridView }]
 
 export default createRouter({
   routes,

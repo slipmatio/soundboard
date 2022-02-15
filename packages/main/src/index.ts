@@ -1,10 +1,11 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, protocol } from 'electron'
 import { join } from 'path'
-import { mkdir } from 'fs/promises'
+import { mkdir, unlink } from 'fs/promises'
 import { URL } from 'url'
 // import devalue from '@nuxt/devalue'
 import Store from 'electron-store'
 import 'v8-compile-cache'
+import type { Sample } from 'root/types'
 
 import {
   enforceApplicationFolder,
@@ -25,6 +26,7 @@ const store = new Store({
 const isSingleInstance = app.requestSingleInstanceLock()
 const userDataPath = app.getPath('userData')
 const samplePath = join(userDataPath, 'samples')
+const protocolName = 'slip-board'
 console.log('userDataPath', userDataPath)
 pathAvailable(samplePath).then((available) => {
   if (available) {
@@ -45,6 +47,13 @@ const mainPageUrl =
   isDevelopment && import.meta.env.VITE_DEV_SERVER_URL !== undefined
     ? import.meta.env.VITE_DEV_SERVER_URL
     : new URL('../renderer/dist/index.html', 'file://' + __dirname).toString()
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'slip-board',
+    privileges: { secure: true, standard: true, supportFetchAPI: true },
+  },
+])
 
 if (!isSingleInstance) {
   app.quit()
@@ -105,8 +114,44 @@ ipcMain.on('openSamplesFilepicker', () => {
     })
 })
 
+ipcMain.on('processDroppedSamples', (event, fileList: string[]) => {
+  console.log('processing dropped samples')
+
+  filepathsToSamples(samplePath, fileList).then((samples) => {
+    console.log('got samples: ', samples)
+    mainWindow.webContents.send('addedSamples', samples)
+  })
+})
+
+ipcMain.on('confirmSampleDelete', (event, sample: Sample) => {
+  console.log('confirmSampleDelete payload: ', sample)
+
+  const answer = dialog.showMessageBoxSync({
+    message: 'Are you sure?',
+    type: 'warning',
+    detail: 'This action cannot be undone.',
+    buttons: ['Yes', 'No'],
+  })
+
+  if (answer === 0) {
+    console.log('deleting sample: ', sample)
+    mainWindow.webContents.send('deletedSample', sample.id)
+    unlink(sample.path).then(() => {
+      console.log('succesfully deleted sample')
+    })
+  }
+})
+
 function initMain() {
   return new Promise<void>((resolve) => {
+    protocol.registerFileProtocol(protocolName, (request, callback) => {
+      const url = request.url.replace(`${protocolName}://`, '')
+      try {
+        return callback(decodeURIComponent(url))
+      } catch (error) {
+        console.error(error)
+      }
+    })
     resolve()
   })
 }

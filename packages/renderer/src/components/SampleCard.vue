@@ -63,10 +63,10 @@ watch(wavecontainer, (newContainer) => {
 </script>
 <template>
   <div
-    class="h-[100px] w-[200px] border rounded flex flex-col overflow-hidden mx-1 my-1"
+    class="h-[100px] w-[200px] border-2 rounded flex flex-col overflow-hidden mx-1 my-1 bg-white/5"
     :class="{
-      'border-red-400/50': activeSample === sample.id,
-      'border-white/30': activeSample !== sample.id,
+      'border-indigo-500/60': activeSample === sample.id,
+      'border-[#1C1E20]': activeSample !== sample.id,
     }"
     @click="selectSample"
   >

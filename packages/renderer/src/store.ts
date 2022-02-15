@@ -116,5 +116,10 @@ export const useStore = defineStore('main', {
         return filter(samplePredicate, state.samples)
       }
     },
+
+    getSelectedSample(state) {
+      const predicate = (sample: Sample) => sample.id === state.ui.activeSample
+      return find(predicate, state.samples)
+    },
   },
 })

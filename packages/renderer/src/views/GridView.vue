@@ -2,6 +2,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useStore } from '@/store'
 import SampleCard from '@/components/SampleCard.vue'
+import SampleEditor from '@/components/SampleEditor.vue'
 
 const store = useStore()
 const samples = computed(() => store.samples)
@@ -26,12 +27,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    v-if="sampleIsSelected && mode === 'edit'"
-    class="absolute top-[52px] bottom-0 right-0 bg-green-500 w-[280px]"
-  >
-    <h2>Hello</h2>
-  </div>
+  <SampleEditor v-if="sampleIsSelected && mode === 'edit'" />
   <div
     class="flex flex-1 mt-[52px] px-4 py-3"
     :class="{

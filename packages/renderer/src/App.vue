@@ -16,6 +16,7 @@ function toggleUiMode() {
     store.ui.mode = 'edit'
   } else {
     store.ui.mode = 'play'
+    store.setActiveSample('')
   }
 }
 

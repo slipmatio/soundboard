@@ -40,11 +40,8 @@ window.api.receive('focus', () => {
   store.changeFocus(true)
 })
 
-window.api.receive('addSamples', async (filepaths: string[]) => {
-  console.log('in main addSamples', filepaths)
-  for (const filepath of filepaths) {
-    store.files.push(filepath)
-  }
+window.api.receive('addSamples', (filepaths: string[]) => {
+  store.addSamples(filepaths)
 })
 
 console.log('Renderer setup DONE')

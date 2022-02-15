@@ -1,11 +1,16 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
-import { join } from 'path'
+import { join, basename } from 'path'
+import { mkdir, copyFile } from 'fs/promises'
 import { URL } from 'url'
 // import devalue from '@nuxt/devalue'
 import Store from 'electron-store'
 import 'v8-compile-cache'
 
-import { enforceApplicationFolder } from './utils'
+import {
+  enforceApplicationFolder,
+  pathAvailable,
+  findUniqueFilename,
+} from './utils'
 import './security'
 
 // import settings from 'electron-settings'
@@ -18,6 +23,17 @@ const store = new Store({
   // serialize: devalue,
 })
 const isSingleInstance = app.requestSingleInstanceLock()
+const userDataPath = app.getPath('userData')
+const samplePath = join(userDataPath, 'samples')
+console.log('userDataPath', userDataPath)
+pathAvailable(samplePath).then((available) => {
+  if (available) {
+    mkdir(samplePath).then(() => {
+      console.log('Created sample folder')
+    })
+  }
+})
+
 const isDevelopment = import.meta.env.MODE === 'development'
 const openDevtools = isDevelopment
 // const openDevtools = true
@@ -35,19 +51,19 @@ if (!isSingleInstance) {
   process.exit(0)
 }
 
-// if (isDevelopment) {
-//   app
-//     .whenReady()
-//     .then(() => import('electron-devtools-installer'))
-//     .then(({ default: installExtension, VUEJS3_DEVTOOLS }) =>
-//       installExtension(VUEJS3_DEVTOOLS, {
-//         loadExtensionOptions: {
-//           allowFileAccess: true,
-//         },
-//       })
-//     )
-//     .catch((e) => console.error('Failed to install Vue devtools extension:', e))
-// }
+if (isDevelopment) {
+  app
+    .whenReady()
+    .then(() => import('electron-devtools-installer'))
+    .then(({ default: installExtension, VUEJS3_DEVTOOLS }) =>
+      installExtension(VUEJS3_DEVTOOLS, {
+        loadExtensionOptions: {
+          allowFileAccess: true,
+        },
+      })
+    )
+    .catch((e) => console.error('Failed to install Vue devtools extension:', e))
+}
 
 ipcMain.on('electron-store-get', async (event, val) => {
   event.returnValue = store.get(val)
@@ -70,7 +86,7 @@ ipcMain.on('openSamplesFilepicker', () => {
   // https://github.com/electron/electron/issues/20533
   const interval = setInterval(() => {
     /* nothing */
-  }, 100)
+  }, 50)
 
   dialog
     .showOpenDialog({
@@ -80,7 +96,27 @@ ipcMain.on('openSamplesFilepicker', () => {
     .then((result) => {
       clearInterval(interval)
       console.log('main -> openSamplesFilepicker THEN', result.filePaths)
-      mainWindow.webContents.send('addSamples', result.filePaths)
+      if (result.filePaths.length > 0) {
+        for (const originalPath of result.filePaths) {
+          const filename = basename(originalPath)
+          const sampleFilePath = join(samplePath, filename)
+          pathAvailable(sampleFilePath).then((available) => {
+            let toPath = sampleFilePath
+            if (!available) {
+              findUniqueFilename(sampleFilePath).then((unique: string) => {
+                console.log('found unique: ', unique)
+                toPath = unique
+              })
+            }
+            copyFile(originalPath, toPath).then(() => {
+              console.log('copied FROM ', originalPath)
+              console.log('copied TO ', toPath)
+            })
+          })
+        }
+
+        mainWindow.webContents.send('addSamples', result.filePaths)
+      }
     })
     .catch((err) => {
       console.error('main -> openSamplesFilepicker CATCH', err)
@@ -109,6 +145,10 @@ const createWindow = async () => {
   })
   mainWindow.setBackgroundColor('#1C1E20')
 
+  if (openDevtools) {
+    mainWindow.webContents.openDevTools()
+  }
+
   mainWindow.on('focus', () => {
     mainWindow.webContents.send('focus')
   })
@@ -130,9 +170,6 @@ const createWindow = async () => {
   })
 
   await mainWindow.loadURL(mainPageUrl)
-  if (openDevtools) {
-    mainWindow.webContents.openDevTools()
-  }
 }
 
 app

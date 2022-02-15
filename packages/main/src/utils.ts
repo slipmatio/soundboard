@@ -1,3 +1,5 @@
+import { join, dirname, extname, basename } from 'path'
+import { stat } from 'fs/promises'
 import { app, dialog } from 'electron'
 import type { BrowserWindow } from 'electron'
 import { is } from 'electron-util'
@@ -59,6 +61,58 @@ export function enforceApplicationFolder() {
         })
         reject(new Error('Application not in Applications folder'))
       }
+    }
+  })
+}
+
+export async function pathAvailable(path: string) {
+  return !(await stat(path).catch(() => false))
+}
+
+type fileDict = {
+  dir: string
+  ext: string
+  base: string
+  increment: number
+}
+
+export function findUniqueFilename(filepath: string) {
+  const file: fileDict = {
+    dir: dirname(filepath),
+    ext: extname(filepath),
+    base: basename(filepath, extname(filepath)),
+    increment: 0,
+  }
+
+  return new Promise<string>(function (resolve) {
+    findIncrementalUniqueFilename(file, (filename: string) => {
+      resolve(filename)
+    })
+  })
+}
+
+function findIncrementalUniqueFilename(
+  fdict: fileDict,
+  callback: (filename: string) => void
+) {
+  let append = ''
+
+  if (fdict.increment > 0) {
+    append = '_' + fdict.increment
+  }
+
+  console.log('old filename: ', join(fdict.dir, fdict.base + fdict.ext))
+  const newFilename = join(fdict.dir, fdict.base + append + fdict.ext)
+  pathAvailable(newFilename).then((available) => {
+    if (!available) {
+      console.log('not available: ', newFilename)
+      setImmediate(function () {
+        fdict.increment += 1
+        return findIncrementalUniqueFilename(fdict, callback)
+      })
+    } else {
+      console.log('is available: ', newFilename)
+      return callback(newFilename)
     }
   })
 }

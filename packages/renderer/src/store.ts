@@ -49,15 +49,17 @@ export const useStore = defineStore('main', {
 
     saveStore() {
       const boards = toRaw(this.boards)
-      // console.log('in saveStore typeof this: ', typeof this.boards)
-      // console.log('in saveStore typeof raw: ', typeof boards)
-      // console.log('in saveStore actual data: ', boards)
-      // console.log('in saveStore actual data is proxy: ', isProxy(boards))
       window.api.store.set('boards', boards)
     },
 
     changeFocus(inFocus: boolean) {
       this.ui.inFocus = inFocus
+    },
+
+    addSamples(filepaths: string[]) {
+      for (const filepath of filepaths) {
+        this.files.push(filepath)
+      }
     },
   },
   getters: {

@@ -30,14 +30,8 @@ onMounted(() => {
       'items-start': !firstStart,
     }"
   >
-    <div v-if="!firstStart" class="">
-      <div>
-        <ul>
-          <li v-for="sample in samples" :key="sample.id">
-            <SampleCard :sample="sample" />
-          </li>
-        </ul>
-      </div>
+    <div v-if="!firstStart" class="flex flex-wrap">
+      <SampleCard :sample="sample" v-for="sample in samples" :key="sample.id" />
     </div>
     <div v-else class="w-1/2 mx-auto">
       <h1>Good Hello!</h1>

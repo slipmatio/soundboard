@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join, basename } from 'path'
 import { mkdir, copyFile } from 'fs/promises'
 import { URL } from 'url'
+import { createHash } from 'crypto'
 // import devalue from '@nuxt/devalue'
 import Store from 'electron-store'
 import 'v8-compile-cache'
@@ -11,6 +12,7 @@ import {
   pathAvailable,
   findUniqueFilename,
 } from './utils'
+import { Sample } from 'root/types'
 import './security'
 
 // import settings from 'electron-settings'
@@ -94,32 +96,32 @@ ipcMain.on('openSamplesFilepicker', () => {
       properties: ['openFile', 'multiSelections'],
     })
     .then((result) => {
+      const samples: Sample[] = []
+
       clearInterval(interval)
-      console.log('main -> openSamplesFilepicker THEN', result.filePaths)
+      // console.log('main -> openSamplesFilepicker THEN', result.filePaths)
       if (result.filePaths.length > 0) {
         for (const originalPath of result.filePaths) {
           const filename = basename(originalPath)
           const sampleFilePath = join(samplePath, filename)
-          const toPath = sampleFilePath
-          pathAvailable(sampleFilePath).then((available) => {
-            if (!available) {
-              findUniqueFilename(sampleFilePath).then((unique: string) => {
-                console.log('found unique: ', unique)
-                copyFile(originalPath, unique).then(() => {
-                  console.log('copied FROM ', originalPath)
-                  console.log('copied TO ', unique)
-                })
+          findUniqueFilename(sampleFilePath).then((unique: string) => {
+            console.log('found unique: ', unique)
+            copyFile(originalPath, unique).then(() => {
+              console.log('copied FROM ', originalPath)
+              console.log('copied TO ', unique)
+
+              samples.push({
+                id: 'foo',
+                name: filename,
+                path: unique,
+                mode: 'oneshot',
               })
-            } else {
-              copyFile(originalPath, toPath).then(() => {
-                console.log('copied FROM ', originalPath)
-                console.log('copied TO ', toPath)
-              })
-            }
+            })
           })
         }
 
-        mainWindow.webContents.send('addSamples', result.filePaths)
+        console.log('sending samples')
+        mainWindow.webContents.send('addSamples', samples)
       }
     })
     .catch((err) => {

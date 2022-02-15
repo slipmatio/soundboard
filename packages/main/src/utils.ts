@@ -1,8 +1,10 @@
 import { join, dirname, extname, basename } from 'path'
-import { stat } from 'fs/promises'
+import { stat, copyFile } from 'fs/promises'
+import { createHash } from 'crypto'
 import { app, dialog } from 'electron'
-import type { BrowserWindow } from 'electron'
 import { is } from 'electron-util'
+import type { BrowserWindow } from 'electron'
+import type { Sample } from 'root/types'
 
 const isDevelopment = import.meta.env.MODE === 'development'
 const isTestRun = app.commandLine.getSwitchValue('testrun')
@@ -115,4 +117,40 @@ function findIncrementalUniqueFilename(
       return callback(newFilename)
     }
   })
+}
+
+export async function asyncForEach<T>(
+  array: T[],
+  callback: (item: T, index: number, allItems: T[]) => void
+) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array)
+  }
+}
+
+export async function filepathsToSamples(
+  samplePath: string,
+  filePaths: string[]
+) {
+  const samples: Sample[] = []
+  const md5 = createHash('md5')
+
+  if (filePaths.length > 0) {
+    await asyncForEach(filePaths, async (originalPath) => {
+      const filename = basename(originalPath)
+      const sampleFilePath = join(samplePath, filename)
+      const unique = await findUniqueFilename(sampleFilePath)
+      await copyFile(originalPath, unique)
+      // console.log('copied FROM ', originalPath)
+      // console.log('copied TO ', unique)
+      samples.push({
+        id: md5.update(unique).copy().digest('hex'),
+        name: filename,
+        path: unique,
+        mode: 'oneshot',
+      })
+      // console.log('samples length: ', samples.length)
+    })
+  }
+  return samples
 }

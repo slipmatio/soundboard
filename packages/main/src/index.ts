@@ -1,8 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
-import { join, basename } from 'path'
-import { mkdir, copyFile } from 'fs/promises'
+import { join } from 'path'
+import { mkdir } from 'fs/promises'
 import { URL } from 'url'
-import { createHash } from 'crypto'
 // import devalue from '@nuxt/devalue'
 import Store from 'electron-store'
 import 'v8-compile-cache'
@@ -10,9 +9,8 @@ import 'v8-compile-cache'
 import {
   enforceApplicationFolder,
   pathAvailable,
-  findUniqueFilename,
+  filepathsToSamples,
 } from './utils'
-import { Sample } from 'root/types'
 import './security'
 
 // import settings from 'electron-settings'
@@ -83,7 +81,6 @@ ipcMain.on('rendererReady', () => {
 
 ipcMain.on('openSamplesFilepicker', () => {
   console.log('main -> openSamplesFilepicker')
-
   // Opening file dialog more than once hangs without this
   // https://github.com/electron/electron/issues/20533
   const interval = setInterval(() => {
@@ -96,33 +93,11 @@ ipcMain.on('openSamplesFilepicker', () => {
       properties: ['openFile', 'multiSelections'],
     })
     .then((result) => {
-      const samples: Sample[] = []
-
       clearInterval(interval)
-      // console.log('main -> openSamplesFilepicker THEN', result.filePaths)
-      if (result.filePaths.length > 0) {
-        for (const originalPath of result.filePaths) {
-          const filename = basename(originalPath)
-          const sampleFilePath = join(samplePath, filename)
-          findUniqueFilename(sampleFilePath).then((unique: string) => {
-            console.log('found unique: ', unique)
-            copyFile(originalPath, unique).then(() => {
-              console.log('copied FROM ', originalPath)
-              console.log('copied TO ', unique)
-
-              samples.push({
-                id: 'foo',
-                name: filename,
-                path: unique,
-                mode: 'oneshot',
-              })
-            })
-          })
-        }
-
-        console.log('sending samples')
-        mainWindow.webContents.send('addSamples', samples)
-      }
+      filepathsToSamples(samplePath, result.filePaths).then((samples) => {
+        console.log('got samples: ', samples)
+        mainWindow.webContents.send('addedSamples', samples)
+      })
     })
     .catch((err) => {
       console.error('main -> openSamplesFilepicker CATCH', err)

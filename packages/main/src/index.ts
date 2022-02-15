@@ -100,18 +100,22 @@ ipcMain.on('openSamplesFilepicker', () => {
         for (const originalPath of result.filePaths) {
           const filename = basename(originalPath)
           const sampleFilePath = join(samplePath, filename)
+          const toPath = sampleFilePath
           pathAvailable(sampleFilePath).then((available) => {
-            let toPath = sampleFilePath
             if (!available) {
               findUniqueFilename(sampleFilePath).then((unique: string) => {
                 console.log('found unique: ', unique)
-                toPath = unique
+                copyFile(originalPath, unique).then(() => {
+                  console.log('copied FROM ', originalPath)
+                  console.log('copied TO ', unique)
+                })
+              })
+            } else {
+              copyFile(originalPath, toPath).then(() => {
+                console.log('copied FROM ', originalPath)
+                console.log('copied TO ', toPath)
               })
             }
-            copyFile(originalPath, toPath).then(() => {
-              console.log('copied FROM ', originalPath)
-              console.log('copied TO ', toPath)
-            })
           })
         }
 

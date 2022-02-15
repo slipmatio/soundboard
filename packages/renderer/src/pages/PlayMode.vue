@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useStore } from '@/store'
+import SampleCard from '@/components/SampleCard.vue'
 
 const store = useStore()
 const samples = computed(() => store.samples)
@@ -11,7 +12,7 @@ const samples = computed(() => store.samples)
     <div>
       <ul>
         <li v-for="sample in samples" :key="sample.id">
-          {{ sample.name }}
+          <SampleCard :sample="sample" />
         </li>
       </ul>
     </div>

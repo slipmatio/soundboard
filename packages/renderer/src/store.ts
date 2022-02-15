@@ -13,6 +13,7 @@ export const useStore = defineStore('main', {
       firstStart: true,
       mode: 'play' as UiMode,
       inFocus: true,
+      activeSample: '',
     },
     boards: [] as Board[],
     samples: [] as Sample[],
@@ -76,6 +77,10 @@ export const useStore = defineStore('main', {
         }
       }
       this.saveStore()
+    },
+
+    setActiveSample(id: string) {
+      this.ui.activeSample = id
     },
   },
   getters: {

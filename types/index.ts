@@ -16,5 +16,5 @@ export interface Sample {
 export interface Board {
   id: string
   name: string
-  samples: Sample[]
+  sampleIds: string[]
 }

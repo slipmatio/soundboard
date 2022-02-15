@@ -49,6 +49,7 @@
     "pinia": "^2.0",
     "postcss": "^8.4",
     "postcss-import": "^14.0.2",
+    "rambda": "^7.0.2",
     "tailwindcss": "^3.0",
     "uniquefilename": "^1.1.2",
     "unused-filename": "^4.0.0",

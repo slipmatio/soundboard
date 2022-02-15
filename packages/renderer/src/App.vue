@@ -62,6 +62,10 @@ window.api.receive('focus', () => {
 window.api.receive('addedSamples', (samples: Sample[]) => {
   store.addSamples(samples)
 })
+
+window.api.receive('deletedSample', (id: string) => {
+  store.deleteSample(id)
+})
 </script>
 
 <style>

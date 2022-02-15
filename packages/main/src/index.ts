@@ -1,10 +1,11 @@
 import { app, BrowserWindow, ipcMain, dialog, protocol } from 'electron'
 import { join } from 'path'
-import { mkdir } from 'fs/promises'
+import { mkdir, unlink } from 'fs/promises'
 import { URL } from 'url'
 // import devalue from '@nuxt/devalue'
 import Store from 'electron-store'
 import 'v8-compile-cache'
+import type { Sample } from 'root/types'
 
 import {
   enforceApplicationFolder,
@@ -120,6 +121,25 @@ ipcMain.on('processDroppedSamples', (event, fileList: string[]) => {
     console.log('got samples: ', samples)
     mainWindow.webContents.send('addedSamples', samples)
   })
+})
+
+ipcMain.on('confirmSampleDelete', (event, sample: Sample) => {
+  console.log('confirmSampleDelete payload: ', sample)
+
+  const answer = dialog.showMessageBoxSync({
+    message: 'Are you sure?',
+    type: 'warning',
+    detail: 'This action cannot be undone.',
+    buttons: ['Yes', 'No'],
+  })
+
+  if (answer === 0) {
+    console.log('deleting sample: ', sample)
+    mainWindow.webContents.send('deletedSample', sample.id)
+    unlink(sample.path).then(() => {
+      console.log('succesfully deleted sample')
+    })
+  }
 })
 
 function initMain() {

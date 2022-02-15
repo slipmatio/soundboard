@@ -1,7 +1,7 @@
 import { toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import type { Sample, Board, UiMode } from 'root/types'
-import { find, filter } from 'rambda'
+import { find, filter, findIndex } from 'rambda'
 
 export const useStore = defineStore('main', {
   state: () => ({
@@ -82,6 +82,28 @@ export const useStore = defineStore('main', {
 
     setActiveSample(id: string) {
       this.ui.activeSample = id
+    },
+
+    deleteSample(id: string) {
+      this.ui.activeSample = ''
+
+      // delete from all boards
+      const bpredicate = (sid: string) => sid === id
+      this.boards.forEach((board, bindex) => {
+        const index = findIndex(bpredicate, board.sampleIds)
+        if (index !== -1) {
+          this.boards[bindex].sampleIds.splice(index, 1)
+        }
+      })
+
+      // delete from samples
+      const predicate = (sample: Sample) => sample.id === id
+      const index = findIndex(predicate, this.samples)
+      if (index !== -1) {
+        this.samples.splice(index, 1)
+      }
+
+      this.saveStore()
     },
   },
   getters: {

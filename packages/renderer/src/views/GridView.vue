@@ -42,7 +42,7 @@ onMounted(() => {
     </div>
     <div
       v-else
-      class="w-1/2 mx-auto"
+      class="w-7/12 mx-auto"
       :class="{
         'border-2 border-[#1C1E20]': !dragMode,
         'border-0': dragMode,

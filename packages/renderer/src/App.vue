@@ -23,12 +23,16 @@ document.addEventListener('drop', (event) => {
   event.preventDefault()
   event.stopPropagation()
   store.ui.dragMode = false
+  const filePaths: string[] = []
   // @ts-expect-error
   for (const f of event.dataTransfer.files) {
     // Using the path attribute to get absolute file path
     // @ts-expect-error
+    filePaths.push(f.path)
+    // @ts-expect-error
     console.log('File Path of dragged files: ', f.path)
   }
+  window.api.send('processDroppedSamples', filePaths)
 })
 
 document.addEventListener('dragover', (e) => {

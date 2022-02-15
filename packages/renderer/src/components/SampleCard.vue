@@ -17,13 +17,17 @@ const props = defineProps<{
 
 function selectSample() {
   console.log('SAMPLE CLICKED')
-  if (isPlaying.value) {
-    player.value?.stop()
-    isPlaying.value = false
-  } else {
-    player.value?.play()
-    isPlaying.value = true
+
+  if (mode.value === 'play') {
+    if (isPlaying.value) {
+      player.value?.stop()
+      isPlaying.value = false
+    } else {
+      player.value?.play()
+      isPlaying.value = true
+    }
   }
+
   if (activeSample.value === props.sample.id) {
     store.setActiveSample('')
   } else {
@@ -37,7 +41,7 @@ watch(wavecontainer, (newContainer) => {
       container: newContainer,
       waveColor: 'violet',
       progressColor: 'purple',
-      cursorColor: '#fff',
+      // cursorColor: '#fff',
       // barWidth: 2,
       // barHeight: 1,
       // barGap: 1,
@@ -45,6 +49,11 @@ watch(wavecontainer, (newContainer) => {
       height: 100,
       hideScrollbar: true,
       // responsive: true,
+    })
+
+    player.value.on('finish', () => {
+      store.setActiveSample('')
+      player.value?.stop()
     })
 
     player.value.load('slip-board://' + props.sample.path)

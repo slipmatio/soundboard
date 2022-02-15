@@ -113,6 +113,15 @@ ipcMain.on('openSamplesFilepicker', () => {
     })
 })
 
+ipcMain.on('processDroppedSamples', (event, fileList: string[]) => {
+  console.log('processing dropped samples')
+
+  filepathsToSamples(samplePath, fileList).then((samples) => {
+    console.log('got samples: ', samples)
+    mainWindow.webContents.send('addedSamples', samples)
+  })
+})
+
 function initMain() {
   return new Promise<void>((resolve) => {
     protocol.registerFileProtocol(protocolName, (request, callback) => {

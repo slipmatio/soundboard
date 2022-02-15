@@ -6,6 +6,7 @@ import SampleCard from '@/components/SampleCard.vue'
 const store = useStore()
 const samples = computed(() => store.samples)
 const firstStart = computed(() => store.ui.firstStart)
+const mode = computed(() => store.ui.mode)
 const dragMode = computed(() => store.ui.dragMode)
 const sampleIsSelected = computed(() => store.ui.activeSample !== '')
 const filepicker = ref(null)
@@ -26,7 +27,7 @@ onMounted(() => {
 
 <template>
   <div
-    v-if="sampleIsSelected"
+    v-if="sampleIsSelected && mode === 'edit'"
     class="absolute top-[52px] bottom-0 right-0 bg-green-500 w-[280px]"
   >
     <h2>Hello</h2>
@@ -36,7 +37,7 @@ onMounted(() => {
     :class="{
       'items-center': firstStart,
       'items-start': !firstStart,
-      'mr-[260px]': sampleIsSelected,
+      'mr-[260px]': sampleIsSelected && mode === 'edit',
       'border-4 border-green-500 bg-green-500/10': dragMode,
     }"
   >

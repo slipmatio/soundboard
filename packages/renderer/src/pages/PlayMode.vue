@@ -9,12 +9,8 @@ const samples = computed(() => store.samples)
 
 <template>
   <div class="flex items-start flex-1 mt-[52px] px-4 py-3">
-    <div>
-      <ul>
-        <li v-for="sample in samples" :key="sample.id">
-          <SampleCard :sample="sample" />
-        </li>
-      </ul>
+    <div class="flex flex-wrap">
+      <SampleCard :sample="sample" v-for="sample in samples" :key="sample.id" />
     </div>
   </div>
 </template>

@@ -13,10 +13,8 @@ const headerBgColor = computed(() => store.headerBgColor)
 function toggleUiMode() {
   if (uiMode.value === 'play') {
     store.ui.mode = 'edit'
-    console.log('changed uiMode to edit')
   } else {
     store.ui.mode = 'play'
-    console.log('changed uiMode to play')
   }
 }
 

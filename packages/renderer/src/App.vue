@@ -3,49 +3,56 @@
     id="header"
     class="h-[52px] w-full flex justify-end items-center os-draggable pr-[18px] flex-none fixed"
   >
-    <div>Play Mode</div>
+    <div @click="toggleUiMode">
+      <div v-if="uiMode === 'play'">Play Mode</div>
+      <div v-else>Edit Mode</div>
+    </div>
   </div>
   <router-view />
 </template>
 
 <script async setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { useStore } from '@/store'
 
 const store = useStore()
-
-const headerColor = ref('#eaeaeb')
-const headerBgColor = ref('#333537')
-
-console.log('renderer App setup')
-
 store.initApp()
 
+const uiMode = computed(() => store.ui.mode)
+const headerTextColor = computed(() => store.headerTextColor)
+const headerBgColor = computed(() => store.headerBgColor)
+
+function toggleUiMode() {
+  if (uiMode.value === 'play') {
+    store.ui.mode = 'edit'
+    console.log('changed uiMode to edit')
+  } else {
+    store.ui.mode = 'play'
+    console.log('changed uiMode to play')
+  }
+}
+
 window.api.receive('blur', () => {
-  console.log('page blurred!')
-  headerColor.value = '#66696C'
-  headerBgColor.value = '#25282B'
+  store.changeFocus(false)
 })
 
 window.api.receive('focus', () => {
-  console.log('page focused!')
-  headerColor.value = '#eaeaeb'
-  headerBgColor.value = '#333537'
+  store.changeFocus(true)
 })
 
 window.api.receive('addSamples', async (filepaths: string[]) => {
   console.log('in main addSamples', filepaths)
-
   for (const filepath of filepaths) {
     store.files.push(filepath)
   }
-  console.log('date: ', new Date().toUTCString())
 })
+
+console.log('Renderer setup DONE')
 </script>
 
 <style>
 #header {
-  color: v-bind(headerColor);
+  color: v-bind(headerTextColor);
   background-color: v-bind(headerBgColor);
 }
 </style>

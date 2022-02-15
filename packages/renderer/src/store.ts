@@ -1,43 +1,78 @@
+import { unref, isProxy, toRaw } from 'vue'
 import { defineStore } from 'pinia'
-import type { Sample, Board } from 'root/types'
+import type { Sample, Board, UiMode } from 'root/types'
 
 export const useStore = defineStore('main', {
   state: () => ({
     debug:
       import.meta.env.MODE === 'development' ||
       import.meta.env.VITE_PROD_DEBUG === '1',
-    env: {
+    isInited: false,
+    ui: {
       firstStart: true,
-      isInited: false,
+      mode: 'play' as UiMode,
+      inFocus: true,
     },
     boards: [] as Board[],
     samples: [] as Sample[],
     files: [] as string[],
-    initialValue: 1,
   }),
   actions: {
     initApp() {
       return new Promise<void>((resolve) => {
-        this.env.isInited = true
-        console.log('main store inited')
+        const boards = window.api.store.get('boards') as undefined | Board[]
 
-        this.initialValue = window.api.store.get('initialValue')
-
-        if (!window.api.store.get('notFirstStart')) {
-          this.env.firstStart = true
+        if (!boards || boards.length === 0) {
+          this.ui.firstStart = true
+          this.ui.mode = 'edit'
           console.log('this is first start!')
-          // window.api.store.set('notFirstStart', true)
+          this.boards.push({
+            id: 'default',
+            name: 'Default',
+            samples: [],
+          })
+          this.saveStore()
         } else {
-          // this.env.firstStart = false
+          this.ui.firstStart = false
         }
 
+        this.isInited = true
         window.api.send('rendererReady')
         resolve()
       })
     },
 
     saveStore() {
-      // window.api.store.set('initialValue', this.initialValue)
+      const boards = toRaw(this.boards)
+      console.log('in saveStore typeof this: ', typeof this.boards)
+      console.log('in saveStore typeof raw: ', typeof boards)
+      console.log('in saveStore actual data: ', boards)
+      console.log('in saveStore actual data is proxy: ', isProxy(boards))
+      window.api.store.set('boards', boards)
+    },
+
+    changeFocus(inFocus: boolean) {
+      this.ui.inFocus = inFocus
+    },
+  },
+  getters: {
+    headerBgColor(state) {
+      if (state.ui.inFocus) {
+        if (state.ui.mode === 'play') {
+          return '#333537'
+        } else {
+          return '#6A3832'
+        }
+      } else {
+        return '#25282B'
+      }
+    },
+    headerTextColor(state) {
+      if (state.ui.inFocus) {
+        return '#eaeaeb'
+      } else {
+        return '#66696C'
+      }
     },
   },
 })

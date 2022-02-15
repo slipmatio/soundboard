@@ -1,14 +1,23 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useStore } from '@/store'
 
 const store = useStore()
 const firstStart = computed(() => store.ui.firstStart)
-const files = computed(() => store.files)
+const filepicker = ref(null)
 
 function openFilepicker() {
   window.api.send('openSamplesFilepicker')
+  // @ts-expect-error
+  filepicker.value?.blur()
 }
+
+onMounted(() => {
+  // @ts-expect-error
+  filepicker.value?.blur()
+  // @ts-expect-error
+  document.activeElement?.blur()
+})
 </script>
 
 <template>
@@ -29,7 +38,11 @@ function openFilepicker() {
         Soundboard user folder.
       </p>
 
-      <button class="mt-10 btn big" @click="openFilepicker">
+      <button
+        class="mt-10 btn big focus:outline-none focus:ring-2 focus:ring-red-600"
+        @click="openFilepicker"
+        ref="filepicker"
+      >
         <div class="flex flex-row items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -48,11 +61,6 @@ function openFilepicker() {
           <span class="ml-2">Import samples</span>
         </div>
       </button>
-
-      <h3 class="mt-8">Files ({{ files.length }})</h3>
-      <ul>
-        <li v-for="file in files" :key="file">{{ file }}</li>
-      </ul>
     </div>
   </div>
 </template>

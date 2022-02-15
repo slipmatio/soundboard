@@ -3,7 +3,7 @@
     id="header"
     class="h-[52px] w-full flex justify-end items-center os-draggable pr-[18px] flex-none fixed"
   >
-    <div @click="toggleUiMode">
+    <div @click="toggleUiMode" class="px-3 py-1 rounded hover:bg-white/10">
       <div v-if="uiMode === 'play'">Play Mode</div>
       <div v-else>Edit Mode</div>
     </div>

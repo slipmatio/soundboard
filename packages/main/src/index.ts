@@ -19,7 +19,8 @@ const store = new Store({
 })
 const isSingleInstance = app.requestSingleInstanceLock()
 const isDevelopment = import.meta.env.MODE === 'development'
-const openDevtools = true
+const openDevtools = isDevelopment
+// const openDevtools = true
 
 // const prodDebug = import.meta.env.VITE_PROD_DEBUG === '1'
 let rendererReady = false

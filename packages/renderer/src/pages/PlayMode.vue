@@ -13,7 +13,7 @@ function increase() {
 }
 
 function openFilepicker() {
-  window.api.sendSync('openSamplesFilepicker')
+  window.api.send('openSamplesFilepicker')
 }
 </script>
 

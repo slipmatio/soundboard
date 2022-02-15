@@ -35,6 +35,7 @@ window.api.receive('focus', () => {
 
 window.api.receive('addSamples', async (filepaths: string[]) => {
   console.log('in main addSamples', filepaths)
+
   for (const filepath of filepaths) {
     store.files.push(filepath)
   }

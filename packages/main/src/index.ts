@@ -19,7 +19,7 @@ const store = new Store({
 })
 const isSingleInstance = app.requestSingleInstanceLock()
 const isDevelopment = import.meta.env.MODE === 'development'
-console.log('userData dir: ', app.getPath('userData'))
+const openDevtools = true
 
 // const prodDebug = import.meta.env.VITE_PROD_DEBUG === '1'
 let rendererReady = false
@@ -63,12 +63,19 @@ ipcMain.on('rendererReady', () => {
 ipcMain.on('openSamplesFilepicker', () => {
   console.log('main -> openSamplesFilepicker')
 
+  // Opening file dialog more than once hangs without this
+  // https://github.com/electron/electron/issues/20533
+  const interval = setInterval(() => {
+    /* nothing */
+  }, 100)
+
   dialog
     .showOpenDialog({
       filters: [{ name: 'Samples', extensions: ['mp3', 'wav', 'aac'] }],
-      properties: ['openFile', 'multiSelections'],
+      properties: ['openFile'],
     })
     .then((result) => {
+      clearInterval(interval)
       console.log('main -> openSamplesFilepicker THEN', result.filePaths)
       mainWindow.webContents.send('addSamples', result.filePaths)
     })
@@ -120,9 +127,9 @@ const createWindow = async () => {
   })
 
   await mainWindow.loadURL(mainPageUrl)
-  // if (isDevelopment) {
-  //   mainWindow.webContents.openDevTools()
-  // }
+  if (openDevtools) {
+    mainWindow.webContents.openDevTools()
+  }
 }
 
 app

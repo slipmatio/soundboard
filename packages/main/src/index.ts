@@ -47,6 +47,13 @@ const mainPageUrl =
     ? import.meta.env.VITE_DEV_SERVER_URL
     : new URL('../renderer/dist/index.html', 'file://' + __dirname).toString()
 
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'slip-board',
+    privileges: { secure: true, standard: true, supportFetchAPI: true },
+  },
+])
+
 if (!isSingleInstance) {
   app.quit()
   process.exit(0)
@@ -130,7 +137,6 @@ const createWindow = async () => {
     webPreferences: {
       webviewTag: false,
       nativeWindowOpen: true,
-      webSecurity: false,
       preload: join(__dirname, '../../preload/dist/index.cjs'),
     },
   })

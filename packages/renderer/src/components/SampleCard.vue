@@ -9,6 +9,7 @@ const mode = computed(() => store.ui.mode)
 const activeSample = computed(() => store.ui.activeSample)
 const wavecontainer = ref(null)
 const player = ref<WaveSurfer>()
+const isPlaying = ref(false)
 
 const props = defineProps<{
   sample: Sample
@@ -16,7 +17,13 @@ const props = defineProps<{
 
 function selectSample() {
   console.log('SAMPLE CLICKED')
-  player.value?.playPause()
+  if (isPlaying.value) {
+    player.value?.stop()
+    isPlaying.value = false
+  } else {
+    player.value?.play()
+    isPlaying.value = true
+  }
   if (activeSample.value === props.sample.id) {
     store.setActiveSample('')
   } else {
@@ -40,7 +47,8 @@ watch(wavecontainer, (newContainer, oldContainer) => {
       // responsive: true,
     })
 
-    player.value.load('file://' + props.sample.path)
+    player.value.load('slip-board://' + props.sample.path)
+    // player.value.load('file://' + props.sample.path)
   }
 })
 </script>

@@ -3,6 +3,7 @@ import { computed, ref, onMounted } from 'vue'
 import { useStore } from '@/store'
 
 const store = useStore()
+const samples = computed(() => store.samples)
 const firstStart = computed(() => store.ui.firstStart)
 const filepicker = ref(null)
 
@@ -21,9 +22,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex items-center flex-1 mt-[52px]">
-    <div v-if="!firstStart">
-      <p>secondstart</p>
+  <div
+    class="flex flex-1 mt-[52px] px-4 py-3"
+    :class="{
+      'items-center': firstStart,
+      'items-start': !firstStart,
+    }"
+  >
+    <div v-if="!firstStart" class="">
+      <div>
+        <ul>
+          <li v-for="sample in samples" :key="sample.id">
+            {{ sample.name }}
+          </li>
+        </ul>
+      </div>
     </div>
     <div v-else class="w-1/2 mx-auto">
       <h1>Good Hello!</h1>

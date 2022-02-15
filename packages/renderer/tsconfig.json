@@ -3,7 +3,8 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],
-      "mainpkg/*": ["../main/src/*"]
+      "mainpkg/*": ["../main/src/*"],
+      "root/*": ["../../*"]
     },
     "lib": ["ESNext", "dom", "dom.iterable"]
   },

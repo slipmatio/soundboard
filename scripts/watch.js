@@ -78,7 +78,11 @@ const setupMainPackageWatcher = (viteDevServer) => {
         spawnProcess = null
       }
 
-      spawnProcess = spawn(String(electronPath), ['--inspect=5858', '.'])
+      spawnProcess = spawn(String(electronPath), [
+        '--testrun=1',
+        '--inspect=5858',
+        '.',
+      ])
 
       spawnProcess.stdout.on(
         'data',

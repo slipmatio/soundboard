@@ -3,7 +3,7 @@ const { strict: assert } = require('assert')
 
 // Playwright has EXPERIMENTAL electron support.
 ;(async () => {
-  const electronApp = await electron.launch({ args: ['.'] })
+  const electronApp = await electron.launch({ args: ['--testrun=1', '.'] })
 
   /**
    * App main window state

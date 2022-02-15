@@ -1,7 +1,11 @@
 module.exports = {
   content: ['packages/**/*.{html,vue,ts,js}'],
   theme: {
-    extend: {},
+    extend: {
+      borderRadius: {
+        native: '0.2rem',
+      },
+    },
   },
   plugins: [],
 }

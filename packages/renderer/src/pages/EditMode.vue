@@ -3,14 +3,8 @@ import { computed } from 'vue'
 import { useStore } from '@/store'
 
 const store = useStore()
-const initialValue = computed(() => store.initialValue)
 const firstStart = computed(() => store.ui.firstStart)
 const files = computed(() => store.files)
-
-function increase() {
-  store.initialValue++
-  // store.saveStore()
-}
 
 function openFilepicker() {
   window.api.send('openSamplesFilepicker')
@@ -20,9 +14,7 @@ function openFilepicker() {
 <template>
   <div class="flex items-center flex-1 mt-[52px]">
     <div v-if="!firstStart">
-      <p>Initial state value: {{ initialValue }}</p>
-
-      <button class="btn" @click="increase">Increase</button>
+      <p>secondstart</p>
     </div>
     <div v-else class="w-1/2 mx-auto">
       <h1>Good Hello!</h1>

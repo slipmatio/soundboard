@@ -1,4 +1,4 @@
-import { unref, isProxy, toRaw } from 'vue'
+import { toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import type { Sample, Board, UiMode } from 'root/types'
 
@@ -32,7 +32,12 @@ export const useStore = defineStore('main', {
             samples: [],
           })
           this.saveStore()
+        } else if (boards[0].samples.length === 0) {
+          console.log('this is not first start but there are no samples')
+          this.ui.firstStart = true
+          this.ui.mode = 'edit'
         } else {
+          console.log('this is not first start!')
           this.ui.firstStart = false
         }
 
@@ -44,10 +49,10 @@ export const useStore = defineStore('main', {
 
     saveStore() {
       const boards = toRaw(this.boards)
-      console.log('in saveStore typeof this: ', typeof this.boards)
-      console.log('in saveStore typeof raw: ', typeof boards)
-      console.log('in saveStore actual data: ', boards)
-      console.log('in saveStore actual data is proxy: ', isProxy(boards))
+      // console.log('in saveStore typeof this: ', typeof this.boards)
+      // console.log('in saveStore typeof raw: ', typeof boards)
+      // console.log('in saveStore actual data: ', boards)
+      // console.log('in saveStore actual data is proxy: ', isProxy(boards))
       window.api.store.set('boards', boards)
     },
 

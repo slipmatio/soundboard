@@ -6,6 +6,7 @@ import SampleCard from '@/components/SampleCard.vue'
 const store = useStore()
 const samples = computed(() => store.samples)
 const firstStart = computed(() => store.ui.firstStart)
+const sampleIsSelected = computed(() => store.ui.activeSample !== '')
 const filepicker = ref(null)
 
 function openFilepicker() {
@@ -24,10 +25,17 @@ onMounted(() => {
 
 <template>
   <div
+    v-if="sampleIsSelected"
+    class="absolute top-[52px] bottom-0 right-0 bg-green-500 w-[280px]"
+  >
+    <h2>Hello</h2>
+  </div>
+  <div
     class="flex flex-1 mt-[52px] px-4 py-3"
     :class="{
       'items-center': firstStart,
       'items-start': !firstStart,
+      'mr-[260px]': sampleIsSelected,
     }"
   >
     <div v-if="!firstStart" class="flex flex-wrap">

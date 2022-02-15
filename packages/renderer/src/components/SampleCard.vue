@@ -13,7 +13,11 @@ const props = defineProps<{
 
 function selectSample() {
   console.log('SAMPLE CLICKED')
-  store.setActiveSample(props.sample.id)
+  if (activeSample.value === props.sample.id) {
+    store.setActiveSample('')
+  } else {
+    store.setActiveSample(props.sample.id)
+  }
 }
 </script>
 <template>

@@ -18,7 +18,7 @@ function openFilepicker() {
 </script>
 
 <template>
-  <div class="flex items-center flex-1">
+  <div class="flex items-center flex-1 mt-[52px]">
     <div v-if="!firstStart">
       <p>Initial state value: {{ initialValue }}</p>
 

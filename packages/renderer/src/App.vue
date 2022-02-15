@@ -1,7 +1,7 @@
 <template>
   <div
     id="header"
-    class="h-[52px] w-full flex justify-end items-center os-draggable pr-[18px]"
+    class="h-[52px] w-full flex justify-end items-center os-draggable pr-[18px] flex-none fixed"
   >
     <div>Play Mode</div>
   </div>

@@ -72,7 +72,7 @@ ipcMain.on('openSamplesFilepicker', () => {
   dialog
     .showOpenDialog({
       filters: [{ name: 'Samples', extensions: ['mp3', 'wav', 'aac'] }],
-      properties: ['openFile'],
+      properties: ['openFile', 'multiSelections'],
     })
     .then((result) => {
       clearInterval(interval)

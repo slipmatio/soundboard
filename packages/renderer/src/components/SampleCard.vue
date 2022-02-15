@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useStore } from '@/store'
+import WaveSurfer from 'wavesurfer.js'
 import type { Sample } from 'root/types'
 
 const store = useStore()
 const mode = computed(() => store.ui.mode)
 const activeSample = computed(() => store.ui.activeSample)
+const wavecontainer = ref(null)
+const player = ref<WaveSurfer>()
 
 const props = defineProps<{
   sample: Sample
@@ -13,12 +16,33 @@ const props = defineProps<{
 
 function selectSample() {
   console.log('SAMPLE CLICKED')
+  player.value?.playPause()
   if (activeSample.value === props.sample.id) {
     store.setActiveSample('')
   } else {
     store.setActiveSample(props.sample.id)
   }
 }
+
+watch(wavecontainer, (newContainer, oldContainer) => {
+  if (newContainer) {
+    player.value = WaveSurfer.create({
+      container: newContainer,
+      waveColor: 'violet',
+      progressColor: 'purple',
+      cursorColor: '#fff',
+      // barWidth: 2,
+      // barHeight: 1,
+      // barGap: 1,
+      interact: false,
+      height: 100,
+      hideScrollbar: true,
+      // responsive: true,
+    })
+
+    player.value.load('file://' + props.sample.path)
+  }
+})
 </script>
 <template>
   <div
@@ -31,6 +55,8 @@ function selectSample() {
   >
     <div class="flex-1 px-3 pt-2">
       <h4>{{ sample.name }}</h4>
+
+      <div ref="wavecontainer"></div>
     </div>
     <div v-if="mode === 'edit'" class="flex justify-end w-full px-2 py-1">
       <button class="btn">Edit</button>

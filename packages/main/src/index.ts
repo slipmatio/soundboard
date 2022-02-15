@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, protocol } from 'electron'
 import { join } from 'path'
 import { mkdir } from 'fs/promises'
 import { URL } from 'url'
@@ -25,6 +25,7 @@ const store = new Store({
 const isSingleInstance = app.requestSingleInstanceLock()
 const userDataPath = app.getPath('userData')
 const samplePath = join(userDataPath, 'samples')
+const protocolName = 'slip-board'
 console.log('userDataPath', userDataPath)
 pathAvailable(samplePath).then((available) => {
   if (available) {
@@ -107,6 +108,14 @@ ipcMain.on('openSamplesFilepicker', () => {
 
 function initMain() {
   return new Promise<void>((resolve) => {
+    protocol.registerFileProtocol(protocolName, (request, callback) => {
+      const url = request.url.replace(`${protocolName}://`, '')
+      try {
+        return callback(decodeURIComponent(url))
+      } catch (error) {
+        console.error(error)
+      }
+    })
     resolve()
   })
 }
@@ -121,6 +130,7 @@ const createWindow = async () => {
     webPreferences: {
       webviewTag: false,
       nativeWindowOpen: true,
+      webSecurity: false,
       preload: join(__dirname, '../../preload/dist/index.cjs'),
     },
   })

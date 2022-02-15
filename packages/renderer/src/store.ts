@@ -78,6 +78,8 @@ export const useStore = defineStore('main', {
         }
       }
       this.saveStore()
+      this.ui.firstStart = false
+      this.ui.mode = 'play'
     },
 
     setActiveSample(id: string) {

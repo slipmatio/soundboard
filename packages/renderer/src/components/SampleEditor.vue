@@ -77,6 +77,22 @@ function confirmDelete() {
           </div>
         </div>
       </div>
+
+      <div class="">
+        <label for="name" class="block text-sm font-light">Volume</label>
+        <div class="mt-1">
+          <input
+            id="volume"
+            name="volume"
+            type="range"
+            min="0"
+            max="100"
+            class="block w-full px-2 py-1 text-gray-100 border-b rounded-sm shadow-sm text-12 border-white/20 focus:outline-none bg-white/10"
+            v-model="sample.volume"
+            @change="updateSample"
+          />
+        </div>
+      </div>
     </div>
 
     <div class="flex-1">&nbsp;</div>

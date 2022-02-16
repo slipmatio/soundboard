@@ -103,17 +103,14 @@ function findIncrementalUniqueFilename(
     append = '_' + fdict.increment
   }
 
-  console.log('old filename: ', join(fdict.dir, fdict.base + fdict.ext))
   const newFilename = join(fdict.dir, fdict.base + append + fdict.ext)
   pathAvailable(newFilename).then((available) => {
     if (!available) {
-      console.log('not available: ', newFilename)
       setImmediate(function () {
         fdict.increment += 1
         return findIncrementalUniqueFilename(fdict, callback)
       })
     } else {
-      console.log('is available: ', newFilename)
       return callback(newFilename)
     }
   })
@@ -145,9 +142,10 @@ export async function filepathsToSamples(
       // console.log('copied TO ', unique)
       samples.push({
         id: md5.update(unique).copy().digest('hex'),
-        name: filename,
+        name: basename(originalPath, extname(originalPath)),
         path: unique,
         mode: 'oneshot',
+        volume: 100,
       })
       // console.log('samples length: ', samples.length)
     })

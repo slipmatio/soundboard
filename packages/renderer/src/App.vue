@@ -24,6 +24,10 @@ function toggleUiMode() {
   }
 }
 
+function openFilepicker() {
+  window.api.send('openSamplesFilepicker')
+}
+
 document.addEventListener('drop', (event) => {
   event.preventDefault()
   event.stopPropagation()
@@ -88,18 +92,53 @@ window.api.receive('deletedSample', (id: string) => {
       '!bg-green-600 justify-center': dragMode,
     }"
   >
-    <div
-      v-if="!dragMode"
-      @click="toggleUiMode"
-      class="flex justify-end px-3 py-1 rounded hover:bg-white/10"
-    >
-      <div v-if="uiMode === 'play'">Play Mode</div>
-      <div v-else>Edit Mode</div>
+    <div v-if="!dragMode" class="flex flex-row space-x-4">
+      <div
+        @click="openFilepicker"
+        class="px-2 py-1 rounded hover:bg-white/10 text-white/50"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          aria-hidden="true"
+          role="img"
+          class="w-6 h-6"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+            fill="currentColor"
+          ></path>
+        </svg>
+      </div>
+      <div
+        @click="toggleUiMode"
+        class="flex justify-end px-2 py-1 rounded hover:bg-white/10 text-white/50"
+        :class="{
+          'bg-white/10': uiMode === 'edit',
+        }"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          aria-hidden="true"
+          role="img"
+          class="w-6 h-6"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M3 17v2h6v-2H3M3 5v2h10V5H3m10 16v-2h8v-2h-8v-2h-2v6h2M7 9v2H3v2h4v2h2V9H7m14 4v-2H11v2h10m-6-4h2V7h4V5h-4V3h-2v6Z"
+          ></path>
+        </svg>
+      </div>
     </div>
     <div v-else class="w-full text-xl text-center text-white">
       Drop samples to import
     </div>
   </div>
-  <SampleEditor v-if="sampleIsSelected && mode === 'edit'" />
+  <SampleEditor v-if="mode === 'edit'" />
   <router-view />
 </template>

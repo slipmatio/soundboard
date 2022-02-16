@@ -31,7 +31,7 @@ onMounted(() => {
     :class="{
       'items-center': firstStart,
       'items-start': !firstStart,
-      'mr-[260px]': sampleIsSelected && mode === 'edit',
+      'mr-[260px]': mode === 'edit',
       'border-4 border-green-500 bg-green-500/10': dragMode,
     }"
   >

@@ -14,6 +14,8 @@ export const useStore = defineStore('main', {
       mode: 'play' as UiMode,
       inFocus: true,
       activeSample: '',
+      playingSample: '',
+      pendingSample: '',
       dragMode: false,
     },
     boards: [] as Board[],

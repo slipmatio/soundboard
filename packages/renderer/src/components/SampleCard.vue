@@ -21,7 +21,7 @@ const props = defineProps<{
 
 const durationDisplay = computed(() => {
   if (props.sample.metadata?.duration) {
-    return props.sample.metadata.duration
+    return parseInt(props.sample.metadata.duration) + 's'
   } else {
     return 'n/a'
   }
@@ -148,8 +148,8 @@ watch(props.sample, () => {
         width: `${percentPlayed}%`,
       }"
     ></div>
-    <div class="flex-1">
-      <div clasS="z-40 flex-1 px-3 pt-2">
+    <div class="flex flex-1">
+      <div clasS="z-40 flex flex-col flex-1 px-3 pt-2">
         <div class="flex flex-row items-center justify-between">
           <span class="text-12">
             {{ sample.name }}
@@ -173,6 +173,12 @@ watch(props.sample, () => {
               ></path>
             </svg>
           </span>
+        </div>
+        <div class="flex flex-1"></div>
+        <div class="">
+          <div class="flex justify-end opacity-50 text-11">
+            <span>{{ durationDisplay }}</span>
+          </div>
         </div>
       </div>
       <div ref="wavecontainer" class="absolute inset-0"></div>

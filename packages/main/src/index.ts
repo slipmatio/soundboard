@@ -156,7 +156,7 @@ function initMain() {
 
 const createWindow = async () => {
   mainWindow = new BrowserWindow({
-    width: 1040,
+    width: 1100,
     height: 700,
     show: false, // Use 'ready-to-show' event to show window
     titleBarStyle: 'hidden',

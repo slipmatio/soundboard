@@ -78,7 +78,7 @@ window.api.receive('deletedSample', (id: string) => {
 <template>
   <div
     id="header"
-    class="h-[52px] w-full flex items-center os-draggable pr-[18px] flex-none fixed"
+    class="h-[52px] w-full flex items-center os-draggable pr-[18px] flex-none fixed z-50"
     :class="{
       'justify-end': !dragMode,
       '!bg-green-600 justify-center': dragMode,

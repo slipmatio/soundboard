@@ -73,7 +73,10 @@ watch(wavecontainer, (newContainer) => {
     @click="selectSample"
   >
     <div class="flex-1 px-3 pt-2">
-      <h4>{{ sample.name }}</h4>
+      <h4>
+        <template v-if="sample.mode === 'loop'">Loop: </template
+        >{{ sample.name }}
+      </h4>
 
       <div ref="wavecontainer"></div>
     </div>

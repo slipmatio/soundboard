@@ -49,10 +49,13 @@ function confirmDelete() {
         <div class="mt-1 space-y-2">
           <div class="flex items-center">
             <input
-              id="push-everything"
-              name="push-notifications"
+              id="mode-oneshot"
+              name="oneshot"
+              value="oneshot"
               type="radio"
               class="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+              v-model="sample.mode"
+              @change="updateSample"
             />
             <label for="push-everything" class="block ml-3 font-medium text-12">
               One shot
@@ -60,10 +63,13 @@ function confirmDelete() {
           </div>
           <div class="flex items-center">
             <input
-              id="push-email"
-              name="push-notifications"
+              id="mode-loop"
+              name="loop"
+              value="loop"
               type="radio"
               class="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+              v-model="sample.mode"
+              @change="updateSample"
             />
             <label for="push-email" class="block ml-3 font-medium text-12">
               Loop

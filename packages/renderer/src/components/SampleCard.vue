@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
 import WaveSurfer from 'wavesurfer.js'
 import type { Sample } from 'root/types'
+import SampleEditorVue from './SampleEditor.vue'
 
 const store = useStore()
 const mode = computed(() => store.ui.mode)
@@ -42,14 +43,10 @@ watch(wavecontainer, (newContainer) => {
       waveColor: 'violet',
       progressColor: 'purple',
       // cursorColor: '#fff',
-      // barWidth: 2,
-      // barHeight: 1,
-      // barGap: 1,
       interact: false,
       height: 100,
       hideScrollbar: true,
       backend: 'MediaElement',
-      // responsive: true,
     })
 
     player.value.on('finish', () => {
@@ -58,8 +55,11 @@ watch(wavecontainer, (newContainer) => {
     })
 
     player.value.load('slip-board://' + props.sample.path)
-    // // @ts-expect-error
-    // player.value.backend.media.loop = true
+
+    if (props.sample.mode === 'loop') {
+      // @ts-expect-error
+      player.value.backend.media.loop = true
+    }
   }
 })
 </script>

@@ -48,6 +48,7 @@ watch(wavecontainer, (newContainer) => {
       interact: false,
       height: 100,
       hideScrollbar: true,
+      backend: 'MediaElement',
       // responsive: true,
     })
 
@@ -57,7 +58,8 @@ watch(wavecontainer, (newContainer) => {
     })
 
     player.value.load('slip-board://' + props.sample.path)
-    // player.value.load('file://' + props.sample.path)
+    // // @ts-expect-error
+    // player.value.backend.media.loop = true
   }
 })
 </script>

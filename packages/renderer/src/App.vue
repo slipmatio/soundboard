@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useStore } from '@/store'
 import type { Sample } from 'root/types'
+import SampleEditor from '@/components/SampleEditor.vue'
 
 const store = useStore()
 store.initApp()
@@ -10,6 +11,8 @@ const uiMode = computed(() => store.ui.mode)
 const headerTextColor = computed(() => store.headerTextColor)
 const headerBgColor = computed(() => store.headerBgColor)
 const dragMode = computed(() => store.ui.dragMode)
+const sampleIsSelected = computed(() => store.ui.activeSample !== '')
+const mode = computed(() => store.ui.mode)
 
 function toggleUiMode() {
   if (uiMode.value === 'play') {
@@ -17,6 +20,7 @@ function toggleUiMode() {
   } else {
     store.ui.mode = 'play'
     store.setActiveSample('')
+    store.saveStore()
   }
 }
 
@@ -96,5 +100,6 @@ window.api.receive('deletedSample', (id: string) => {
       Drop samples to import
     </div>
   </div>
+  <SampleEditor v-if="sampleIsSelected && mode === 'edit'" />
   <router-view />
 </template>

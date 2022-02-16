@@ -139,6 +139,6 @@ window.api.receive('deletedSample', (id: string) => {
       Drop samples to import
     </div>
   </div>
-  <SampleEditor v-if="sampleIsSelected && mode === 'edit'" />
+  <SampleEditor v-if="mode === 'edit'" />
   <router-view />
 </template>

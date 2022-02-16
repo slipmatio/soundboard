@@ -19,15 +19,25 @@ import './security'
 // See https://www.electronjs.org/docs/latest/tutorial/offscreen-rendering
 app.disableHardwareAcceleration()
 
-const store = new Store({
-  name: 'pinia',
-  // serialize: devalue,
-})
+let rendererReady = false
+let mainWindow: BrowserWindow
+
 const isSingleInstance = app.requestSingleInstanceLock()
 const userDataPath = app.getPath('userData')
 const samplePath = join(userDataPath, 'samples')
+const isDevelopment = import.meta.env.MODE === 'development'
+const openDevtools = isDevelopment
+// const openDevtools = true
+const mainPageUrl =
+  isDevelopment && import.meta.env.VITE_DEV_SERVER_URL !== undefined
+    ? import.meta.env.VITE_DEV_SERVER_URL
+    : new URL('../renderer/dist/index.html', 'file://' + __dirname).toString()
 const protocolName = 'slip-board'
-console.log('userDataPath', userDataPath)
+const supportedFileFormats = ['aiff', 'aac', 'flac', 'mp3', 'm4a', 'wav'] // https://www.npmjs.com/package/music-metadata
+const store = new Store({
+  name: 'pinia',
+})
+
 pathAvailable(samplePath).then((available) => {
   if (available) {
     mkdir(samplePath).then(() => {
@@ -35,18 +45,6 @@ pathAvailable(samplePath).then((available) => {
     })
   }
 })
-
-const isDevelopment = import.meta.env.MODE === 'development'
-const openDevtools = isDevelopment
-// const openDevtools = true
-
-// const prodDebug = import.meta.env.VITE_PROD_DEBUG === '1'
-let rendererReady = false
-let mainWindow: BrowserWindow
-const mainPageUrl =
-  isDevelopment && import.meta.env.VITE_DEV_SERVER_URL !== undefined
-    ? import.meta.env.VITE_DEV_SERVER_URL
-    : new URL('../renderer/dist/index.html', 'file://' + __dirname).toString()
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -98,7 +96,7 @@ ipcMain.on('openSamplesFilepicker', () => {
 
   dialog
     .showOpenDialog({
-      filters: [{ name: 'Samples', extensions: ['mp3', 'wav', 'aac'] }],
+      filters: [{ name: 'Samples', extensions: supportedFileFormats }],
       properties: ['openFile', 'multiSelections'],
     })
     .then((result) => {

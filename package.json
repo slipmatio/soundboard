@@ -47,6 +47,7 @@
     "electron-updater": "^4.6",
     "electron-util": "^0.17",
     "events": "^3.3",
+    "music-metadata": "^7.11.8",
     "pinia": "^2.0",
     "postcss": "^8.4",
     "postcss-import": "^14.0.2",

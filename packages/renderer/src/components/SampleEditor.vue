@@ -53,7 +53,7 @@ function confirmDelete() {
               name="oneshot"
               value="oneshot"
               type="radio"
-              class="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+              class="w-5 h-5 border-gray-300 text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-700"
               v-model="sample.mode"
               @change="updateSample"
             />
@@ -67,7 +67,7 @@ function confirmDelete() {
               name="loop"
               value="loop"
               type="radio"
-              class="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+              class="w-5 h-5 border-gray-300 text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-700"
               v-model="sample.mode"
               @change="updateSample"
             />
@@ -87,7 +87,7 @@ function confirmDelete() {
             type="range"
             min="0"
             max="100"
-            class="block w-full px-2 py-1 text-gray-100 border-b rounded-sm shadow-sm text-12 border-white/20 focus:outline-none bg-white/10"
+            class="block w-full px-2 py-1 text-gray-100 border-b rounded-sm shadow-sm text-12 border-white/20 focus:outline-none focus:ring-2 bg-white/10"
             v-model="sample.volume"
             @change="updateSample"
           />
@@ -99,7 +99,12 @@ function confirmDelete() {
 
     <hr class="hidden my-8 border border-white/10" />
 
-    <button class="btn editor" @click="confirmDelete">Delete sample</button>
+    <button
+      class="btn editor focus:outline-none focus:ring-2"
+      @click="confirmDelete"
+    >
+      Delete sample
+    </button>
 
     <div class="py-4">&nbsp;</div>
   </div>

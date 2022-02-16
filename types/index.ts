@@ -10,6 +10,7 @@ export interface Sample {
   name: string
   path: string
   mode: 'oneshot' | 'loop'
+  volume: number
   metadata?: SampleMetadata
 }
 

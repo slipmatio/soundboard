@@ -48,6 +48,7 @@ watch(wavecontainer, (newContainer) => {
       interact: false,
       height: 100,
       hideScrollbar: true,
+      backend: 'MediaElement',
       // responsive: true,
     })
 
@@ -57,7 +58,8 @@ watch(wavecontainer, (newContainer) => {
     })
 
     player.value.load('slip-board://' + props.sample.path)
-    // player.value.load('file://' + props.sample.path)
+    // // @ts-expect-error
+    // player.value.backend.media.loop = true
   }
 })
 </script>
@@ -71,7 +73,10 @@ watch(wavecontainer, (newContainer) => {
     @click="selectSample"
   >
     <div class="flex-1 px-3 pt-2">
-      <h4>{{ sample.name }}</h4>
+      <h4>
+        <template v-if="sample.mode === 'loop'">Loop: </template
+        >{{ sample.name }}
+      </h4>
 
       <div ref="wavecontainer"></div>
     </div>

@@ -107,6 +107,11 @@ export const useStore = defineStore('main', {
 
       this.saveStore()
     },
+
+    updateSample(sample: Sample) {
+      console.log('updating sample', sample)
+      this.saveStore()
+    },
   },
   getters: {
     headerBgColor(state) {

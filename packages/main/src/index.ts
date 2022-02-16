@@ -158,8 +158,8 @@ function initMain() {
 
 const createWindow = async () => {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1040,
+    height: 700,
     show: false, // Use 'ready-to-show' event to show window
     titleBarStyle: 'hidden',
     trafficLightPosition: { x: 18, y: 18 },

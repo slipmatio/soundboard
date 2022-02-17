@@ -11,7 +11,6 @@ const uiMode = computed(() => store.ui.mode)
 const headerTextColor = computed(() => store.headerTextColor)
 const headerBgColor = computed(() => store.headerBgColor)
 const dragMode = computed(() => store.ui.dragMode)
-const sampleIsSelected = computed(() => store.ui.activeSample !== '')
 const mode = computed(() => store.ui.mode)
 
 function toggleUiMode() {

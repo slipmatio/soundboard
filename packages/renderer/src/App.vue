@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useStore } from '@/store'
 import type { Sample } from 'root/types'
 import SampleEditor from '@/components/SampleEditor.vue'
+import { ElectronMidi } from '@/util/electronMidi'
 
 const store = useStore()
 store.initApp()
@@ -26,6 +27,28 @@ function toggleUiMode() {
 function openFilepicker() {
   window.api.send('openSamplesFilepicker')
 }
+
+const midi = new ElectronMidi({ debug: false })
+
+midi.onMidiOnMessage = (msg) => {
+  console.log('midi on', msg)
+}
+
+// midi.onInputMessage = (message) => {
+//   console.log('got midi message ', message)
+// }
+
+// // @ts-expect-error
+// navigator.requestMIDIAccess().then(
+//   (midiAccess) => {
+//     console.log('got midi access', midiAccess)
+//   },
+//   (error) => {
+//     console.error(error)
+//   }
+// )
+
+// Global event listeners
 
 document.addEventListener('drop', (event) => {
   event.preventDefault()

@@ -22,7 +22,7 @@ const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map<
     | 'openExternal'
     | 'unknown'
   >
->(import.meta.env.DEV ? [['http://localhost:3000', new Set()]] : [])
+>(import.meta.env.DEV ? [['http://localhost:3000', new Set(['midi'])]] : [])
 
 /**
  * List of origins that you allow open IN BROWSER.
@@ -75,6 +75,12 @@ app.on('web-contents-created', (_, contents) => {
       const permissionGranted =
         !!ALLOWED_ORIGINS_AND_PERMISSIONS.get(origin)?.has(permission)
       callback(permissionGranted)
+
+      console.log('Permission request: ', permission, permissionGranted)
+      console.log(
+        'ALLOWED_ORIGINS_AND_PERMISSIONS: ',
+        ALLOWED_ORIGINS_AND_PERMISSIONS
+      )
 
       if (!permissionGranted && import.meta.env.DEV) {
         console.warn(

@@ -35,9 +35,8 @@ const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map<
  * >
  */
 const ALLOWED_EXTERNAL_ORIGINS = new Set<`https://${string}`>([
-  'https://vitejs.dev',
   'https://github.com',
-  'https://v3.vuejs.org',
+  'https://plausible.io',
 ])
 
 app.on('web-contents-created', (_, contents) => {

@@ -84,7 +84,7 @@ function initCard(newContainer: HTMLElement) {
     hideScrollbar: true,
     backend: 'MediaElement',
   })
-  console.log('player created!')
+  // console.log('player created!')
   player.value.setVolume(props.sample.volume / 100)
   player.value.load('slip-board://' + props.sample.path)
 

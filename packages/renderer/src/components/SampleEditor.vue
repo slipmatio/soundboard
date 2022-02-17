@@ -9,7 +9,6 @@ const mode = computed(() => store.ui.mode)
 const sample = computed(() => store.getSelectedSample)
 const midiData = ref<DecodedMidiMessage>()
 const learningMidi = ref(false)
-const midi = new ElectronMidi({ debug: false })
 
 function blurField(event: Event) {
   // @ts-expect-error
@@ -31,7 +30,7 @@ function confirmDelete() {
 function learnMidi() {
   console.log('learnMidi')
   learningMidi.value = true
-
+  const midi = new ElectronMidi()
   midi.learnMidiOn().then((msg) => {
     console.log('learned midi! ', msg)
     // console.log(`note ${msg.note} on for channel ${msg.channel}}`)

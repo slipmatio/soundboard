@@ -12,7 +12,6 @@ const activeSample = computed(() => store.ui.activeSample)
 const playingSample = computed(() => store.ui.playingSample)
 const pendingSample = computed(() => store.ui.playingSample)
 const selectedSample = computed(() => store.getSelectedSample)
-const midi = new ElectronMidi({ debug: false })
 const wavecontainer = ref(null)
 const player = ref<WaveSurfer>()
 const isPlaying = ref(false)
@@ -111,6 +110,7 @@ function initCard(newContainer: HTMLElement) {
   })
 
   if (props.sample.metadata?.midiChannel !== undefined) {
+    const midi = new ElectronMidi()
     midi.onMidiOnMessage = (msg) => {
       if (msg.note === props.sample.metadata?.midiNote) {
         selectSample()

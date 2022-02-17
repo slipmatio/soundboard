@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
 import WaveSurfer from 'wavesurfer.js'
+import { ElectronMidi } from '@/util/electronMidi'
 import type { Sample } from 'root/types'
 
 let duration = 0
@@ -84,7 +85,7 @@ function initCard(newContainer: HTMLElement) {
     hideScrollbar: true,
     backend: 'MediaElement',
   })
-  console.log('player created!')
+  // console.log('player created!')
   player.value.setVolume(props.sample.volume / 100)
   player.value.load('slip-board://' + props.sample.path)
 
@@ -107,6 +108,15 @@ function initCard(newContainer: HTMLElement) {
     }
     percentPlayed.value = percent
   })
+
+  if (props.sample.metadata?.midiChannel !== undefined) {
+    const midi = new ElectronMidi()
+    midi.onMidiOnMessage = (msg) => {
+      if (msg.note === props.sample.metadata?.midiNote) {
+        selectSample()
+      }
+    }
+  }
 }
 
 watch(wavecontainer, (newContainer) => {
@@ -176,8 +186,28 @@ watch(props.sample, () => {
         </div>
         <div class="flex flex-1"></div>
         <div class="">
-          <div class="flex justify-end opacity-50 text-11">
-            <span>{{ durationDisplay }}</span>
+          <div class="flex items-center justify-between opacity-50 text-11">
+            <div>
+              <svg
+                v-if="sample.metadata?.midiChannel !== undefined"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                role="img"
+                class="w-6 h-6 -mt-[13px]"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M21.775 7.517H24v8.966h-2.225zm-8.562 0h6.506c.66 0 1.045.57 1.045 1.247v6.607c0 .84-.35 1.112-1.112 1.112h-6.439v-5.696h2.225v3.505h3.135V9.54h-5.36zm-3.235 0h2.19v8.966h-2.19zM0 7.517h7.854c.66 0 1.045.57 1.045 1.247v7.72H6.708v-6.71H5.427v6.708H3.438V9.775H2.191v6.708H0Z"
+                ></path>
+              </svg>
+            </div>
+
+            <div>
+              <span>{{ durationDisplay }}</span>
+            </div>
           </div>
         </div>
       </div>

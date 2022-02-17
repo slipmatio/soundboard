@@ -11,7 +11,6 @@ const uiMode = computed(() => store.ui.mode)
 const headerTextColor = computed(() => store.headerTextColor)
 const headerBgColor = computed(() => store.headerBgColor)
 const dragMode = computed(() => store.ui.dragMode)
-const sampleIsSelected = computed(() => store.ui.activeSample !== '')
 const mode = computed(() => store.ui.mode)
 
 function toggleUiMode() {
@@ -27,6 +26,22 @@ function toggleUiMode() {
 function openFilepicker() {
   window.api.send('openSamplesFilepicker')
 }
+
+// midi.onInputMessage = (message) => {
+//   console.log('got midi message ', message)
+// }
+
+// // @ts-expect-error
+// navigator.requestMIDIAccess().then(
+//   (midiAccess) => {
+//     console.log('got midi access', midiAccess)
+//   },
+//   (error) => {
+//     console.error(error)
+//   }
+// )
+
+// Global event listeners
 
 document.addEventListener('drop', (event) => {
   event.preventDefault()

@@ -39,12 +39,12 @@ export const useStore = defineStore('main', {
           })
           this.saveStore()
         } else if (boards[0].sampleIds.length === 0) {
-          console.log('this is not first start but there are no samples')
+          // console.log('this is not first start but there are no samples')
           this.ui.firstStart = true
           this.ui.mode = 'edit'
           this.boards.push(...boards)
         } else {
-          console.log('this is not first start!')
+          // console.log('this is not first start!')
           this.ui.firstStart = false
           this.boards.push(...boards)
           if (samples && samples.length > 0) {

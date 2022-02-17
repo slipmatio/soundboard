@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { computed, toRaw } from 'vue'
+import { computed, toRaw, ref } from 'vue'
 import { useStore } from '@/store'
+import { ElectronMidi } from '@/util/electronMidi'
+import type { DecodedMidiMessage } from '@/util/electronMidi'
 
 const store = useStore()
 const mode = computed(() => store.ui.mode)
 const sample = computed(() => store.getSelectedSample)
+const midiData = ref<DecodedMidiMessage>()
+const learningMidi = ref(false)
 
 function blurField(event: Event) {
   // @ts-expect-error
@@ -21,6 +25,24 @@ function confirmDelete() {
   const obj = toRaw(sample.value)
   console.log('confirmSampleDelete', obj)
   window.api.send('confirmSampleDelete', obj)
+}
+
+function learnMidi() {
+  console.log('learnMidi')
+  learningMidi.value = true
+  const midi = new ElectronMidi()
+  midi.learnMidiOn().then((msg) => {
+    console.log('learned midi! ', msg)
+    // console.log(`note ${msg.note} on for channel ${msg.channel}}`)
+    if (sample.value && sample.value.metadata) {
+      console.log('updated sample data')
+      sample.value.metadata.midiChannel = msg.channel
+      sample.value.metadata.midiNote = msg.note
+      updateSample()
+    }
+    midiData.value = msg
+    learningMidi.value = false
+  })
 }
 </script>
 <template>
@@ -104,11 +126,45 @@ function confirmDelete() {
         </div>
 
         <div class="">
+          <label class="flex flex-row justify-between text-sm font-light">
+            Shortcut
+          </label>
+          <div class="mt-1">
+            <div v-if="sample.metadata?.midiChannel !== undefined">
+              <div class="mt-1 text-sm">
+                <div class="opacity-50">
+                  <span>Channel: </span>
+                  <span>{{ sample.metadata.midiChannel }}</span>
+                </div>
+                <div class="opacity-50">
+                  <span>Note: </span>
+                  <span>{{ sample.metadata.midiNote }}</span>
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              <div class="mt-1 text-sm">
+                <div class="opacity-50">
+                  <span>No Shortcut set</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              class="mt-4 btn editor focus:outline-none focus:ring-2"
+              @click="learnMidi"
+            >
+              Learn MIDI
+            </button>
+          </div>
+        </div>
+
+        <div class="">
           <p class="block text-sm font-light">Metadata</p>
           <div class="mt-1 text-sm">
             <div class="opacity-50">
               <span>Duration: </span>
-              <span>{{ sample.metadata?.duration }}</span>
+              <span>{{ parseInt(sample.metadata?.duration) }}s</span>
             </div>
           </div>
         </div>

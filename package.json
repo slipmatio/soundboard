@@ -1,5 +1,6 @@
 {
   "name": "slipmat-soundboard",
+  "version": "0.0.1",
   "private": true,
   "author": {
     "name": "Ville Säävuori",
@@ -64,6 +65,7 @@
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2",
     "@types/wavesurfer.js": "^6.0.0",
+    "@types/webmidi": "^2.0.6",
     "@typescript-eslint/eslint-plugin": "^5.11",
     "@typescript-eslint/parser": "^5.11",
     "@vitejs/plugin-vue": "^2.2",

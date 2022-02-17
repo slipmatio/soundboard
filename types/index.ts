@@ -3,6 +3,8 @@ export interface SampleMetadata {
   shortcutKey?: string
   volume?: number
   tags?: string[]
+  midiChannel?: number
+  midiNote?: number
   [key: string]: any
 }
 export interface Sample {

@@ -94,8 +94,7 @@ jobs:
 
       ## Dependencies
       - name: Install Dependencies
-      - uses: bahmutov/npm-install@v1
-        run: yarn --frozen-lockfile
+        uses: bahmutov/npm-install@v1
 
       # The easiest way to transfer release notes to a compiled application is create `release-notes.md` in the build resources.
       # See https://github.com/electron-userland/electron-builder/issues/1511#issuecomment-310160119

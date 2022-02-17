@@ -5,6 +5,7 @@ import { URL } from 'url'
 // import devalue from '@nuxt/devalue'
 import Store from 'electron-store'
 import 'v8-compile-cache'
+import pkg from '../../../package.json'
 import type { Sample } from 'root/types'
 
 import {
@@ -150,6 +151,7 @@ function initMain() {
         console.error(error)
       }
     })
+
     resolve()
   })
 }
@@ -220,7 +222,16 @@ app.on('window-all-closed', () => {
   app.quit()
 })
 
-// Auto-updates
+app.setAboutPanelOptions({
+  applicationName: 'Slipmat Soundboard',
+  applicationVersion: pkg.version + ' ' + app.getVersion(),
+  copyright: 'Copyright © 2022 Ville Säävuori',
+  credits:
+    'Thank you to the awesome Slipmat.io community - keep the music playing!',
+  authors: ['Ville Säävuori'],
+  website: 'https://slipmat.io',
+})
+// // Auto - updates
 // if (import.meta.env.PROD) {
 //   app
 //     .whenReady()

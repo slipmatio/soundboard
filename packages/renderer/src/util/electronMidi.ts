@@ -39,7 +39,7 @@ function debugMidiOnMessage(msg: DecodedMidiMessage) {
   console.log(`MIDI on: note ${msg.note} on for channel ${msg.channel}}`)
 }
 
-export const ElectronMidi = class {
+export class ElectronMidi {
   #debug: boolean
   #midiAccess: WebMidi.MIDIAccess | undefined
   #onInputMessage: onMidiInputFn
@@ -120,7 +120,6 @@ export const ElectronMidi = class {
         input && !input.done;
         input = inputs.next()
       ) {
-        console.log('initing')
         input.value.onmidimessage = (event) => {
           this.#onInputMessage(event)
           const data = event.data

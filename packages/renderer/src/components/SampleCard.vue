@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
 import WaveSurfer from 'wavesurfer.js'
+import { ElectronMidi } from '@/util/electronMidi'
 import type { Sample } from 'root/types'
 
 let duration = 0
@@ -11,6 +12,7 @@ const activeSample = computed(() => store.ui.activeSample)
 const playingSample = computed(() => store.ui.playingSample)
 const pendingSample = computed(() => store.ui.playingSample)
 const selectedSample = computed(() => store.getSelectedSample)
+const midi = new ElectronMidi({ debug: false })
 const wavecontainer = ref(null)
 const player = ref<WaveSurfer>()
 const isPlaying = ref(false)
@@ -107,6 +109,14 @@ function initCard(newContainer: HTMLElement) {
     }
     percentPlayed.value = percent
   })
+
+  if (props.sample.metadata?.midiChannel !== undefined) {
+    midi.onMidiOnMessage = (msg) => {
+      if (msg.note === props.sample.metadata?.midiNote) {
+        selectSample()
+      }
+    }
+  }
 }
 
 watch(wavecontainer, (newContainer) => {

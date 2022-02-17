@@ -2,6 +2,7 @@ import { toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import type { Sample, Board, UiMode } from 'root/types'
 import { find, filter, findIndex } from 'rambda'
+import { ElectronMidi } from '@/util/electronMidi'
 
 export const useStore = defineStore('main', {
   state: () => ({
@@ -21,10 +22,17 @@ export const useStore = defineStore('main', {
     boards: [] as Board[],
     samples: [] as Sample[],
     files: [] as string[],
+    midi: {} as ElectronMidi,
   }),
   actions: {
     initApp() {
       return new Promise<void>((resolve) => {
+        const midi = new ElectronMidi({ debug: false })
+        midi.onMidiOnMessage = (msg) => {
+          console.log('midi on', msg)
+        }
+        this.midi = midi
+
         const boards = window.api.store.get('boards') as undefined | Board[]
         const samples = window.api.store.get('samples') as undefined | Sample[]
 
@@ -39,12 +47,12 @@ export const useStore = defineStore('main', {
           })
           this.saveStore()
         } else if (boards[0].sampleIds.length === 0) {
-          console.log('this is not first start but there are no samples')
+          // console.log('this is not first start but there are no samples')
           this.ui.firstStart = true
           this.ui.mode = 'edit'
           this.boards.push(...boards)
         } else {
-          console.log('this is not first start!')
+          // console.log('this is not first start!')
           this.ui.firstStart = false
           this.boards.push(...boards)
           if (samples && samples.length > 0) {

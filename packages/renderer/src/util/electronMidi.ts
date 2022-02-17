@@ -45,6 +45,7 @@ export const ElectronMidi = class {
   #onInputMessage: onMidiInputFn
   #oldOnInputMessage: onMidiInputFn | undefined
   #onMidiOnMessage: onMidiOnMsgFn
+  #oldMidiOnMessage: onMidiOnMsgFn | undefined
   #onReady: () => void
 
   constructor(options?: MidiOptions) {
@@ -85,9 +86,19 @@ export const ElectronMidi = class {
   learn() {
     this.#oldOnInputMessage = this.#onInputMessage
     return new Promise<WebMidi.MIDIMessageEvent>((resolve) => {
-      this.onInputMessage = (event) => {
+      this.#onInputMessage = (event) => {
         this.#onInputMessage = this.#oldOnInputMessage!
         resolve(event)
+      }
+    })
+  }
+
+  learnMidiOn() {
+    this.#oldMidiOnMessage = this.#onMidiOnMessage
+    return new Promise<DecodedMidiMessage>((resolve) => {
+      this.#onMidiOnMessage = (msg) => {
+        this.#onMidiOnMessage = this.#oldMidiOnMessage!
+        resolve(msg)
       }
     })
   }

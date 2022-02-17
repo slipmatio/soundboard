@@ -113,7 +113,6 @@ jobs:
           APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           VITE_PROD_DEBUG: '1'
-          SKIP_NOTARIZATION: '1'
         with:
           build_script_name: build
           args: --config .electron-builder.config.js --x64 --arm64

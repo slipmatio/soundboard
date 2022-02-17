@@ -30,6 +30,7 @@ function confirmDelete() {
 function learnMidi() {
   console.log('learnMidi')
   learningMidi.value = true
+  store.ui.learningMidi = true
   const midi = new ElectronMidi()
   midi.learnMidiOn().then((msg) => {
     console.log('learned midi! ', msg)
@@ -42,7 +43,17 @@ function learnMidi() {
     }
     midiData.value = msg
     learningMidi.value = false
+    store.ui.learningMidi = false
   })
+}
+
+function removeMidi() {
+  if (sample.value && sample.value.metadata) {
+    console.log('removing midi from sample')
+    delete sample.value.metadata.midiChannel
+    delete sample.value.metadata.midiNote
+    updateSample()
+  }
 }
 </script>
 <template>
@@ -149,6 +160,13 @@ function learnMidi() {
                 </div>
               </div>
             </div>
+
+            <button
+              class="mt-4 btn editor focus:outline-none focus:ring-2"
+              @click="removeMidi"
+            >
+              Remove MIDI mapping
+            </button>
 
             <button
               class="mt-4 btn editor focus:outline-none focus:ring-2"

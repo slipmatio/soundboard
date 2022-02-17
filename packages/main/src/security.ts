@@ -1,6 +1,12 @@
 import { app, shell } from 'electron'
 import { URL } from 'url'
 
+const isDevelopment = import.meta.env.MODE === 'development'
+const mainPageUrl =
+  isDevelopment && import.meta.env.VITE_DEV_SERVER_URL !== undefined
+    ? import.meta.env.VITE_DEV_SERVER_URL
+    : new URL('../renderer/dist/index.html', 'file://' + __dirname).toString()
+
 /**
  * List of origins that you allow open INSIDE the application and permissions for each of them.
  *
@@ -22,8 +28,12 @@ const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map<
     | 'openExternal'
     | 'unknown'
   >
->(import.meta.env.DEV ? [['http://localhost:3000', new Set(['midi'])]] : [])
-
+>(
+  isDevelopment
+    ? [[mainPageUrl, new Set(['midi'])]]
+    : [[mainPageUrl, new Set(['midi'])]]
+)
+const ALLOWED_PERMISSIONS = ['midi', 'fullscreen', 'clipboard-read']
 /**
  * List of origins that you allow open IN BROWSER.
  * Navigation to origins below is possible only if the link opens in a new window
@@ -37,6 +47,7 @@ const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map<
 const ALLOWED_EXTERNAL_ORIGINS = new Set<`https://${string}`>([
   'https://github.com',
   'https://plausible.io',
+  'https://slipmat.io',
 ])
 
 app.on('web-contents-created', (_, contents) => {
@@ -72,8 +83,9 @@ app.on('web-contents-created', (_, contents) => {
     (webContents, permission, callback) => {
       const { origin } = new URL(webContents.getURL())
 
-      const permissionGranted =
-        !!ALLOWED_ORIGINS_AND_PERMISSIONS.get(origin)?.has(permission)
+      // const permissionGranted =
+      //   !!ALLOWED_ORIGINS_AND_PERMISSIONS.get(origin)?.has(permission)
+      const permissionGranted = ALLOWED_PERMISSIONS.includes(permission)
       callback(permissionGranted)
 
       console.log('Permission request: ', permission, permissionGranted)

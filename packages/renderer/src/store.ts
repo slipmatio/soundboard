@@ -17,6 +17,7 @@ export const useStore = defineStore('main', {
       playingSample: '',
       pendingSample: '',
       dragMode: false,
+      learningMidi: false,
     },
     boards: [] as Board[],
     samples: [] as Sample[],

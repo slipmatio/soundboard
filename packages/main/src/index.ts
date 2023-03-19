@@ -165,7 +165,6 @@ const createWindow = async () => {
     trafficLightPosition: { x: 18, y: 18 },
     webPreferences: {
       webviewTag: false,
-      nativeWindowOpen: true,
       preload: join(__dirname, '../../preload/dist/index.cjs'),
     },
   })
